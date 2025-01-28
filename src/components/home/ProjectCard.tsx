@@ -3,9 +3,9 @@ import { Card, CardContent,
     CardFooter,
     CardHeader,
     CardTitle,
-  } from "@/components/ui/card"
-import { Progress } from "./components/ui/progress";
-import OverlappingAvatars from "@/OverlappingAvatars.tsx";
+  } from "@/components/ui/card.tsx"
+import { Progress } from "../ui/progress.tsx";
+import OverlappingAvatars from "@/components/home/OverlappingAvatars.tsx";
 import { Calendar } from "lucide-react";
 
 export default function ProjectCard() {
