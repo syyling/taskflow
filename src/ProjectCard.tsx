@@ -6,6 +6,7 @@ import { Card, CardContent,
   } from "@/components/ui/card"
 import { Progress } from "./components/ui/progress";
 import OverlappingAvatars from "@/OverlappingAvatars.tsx";
+import { Calendar } from "lucide-react";
 
 export default function ProjectCard() {
   return (
@@ -21,8 +22,11 @@ export default function ProjectCard() {
             <OverlappingAvatars />
         </CardContent>
       <CardFooter className="flex">
-        <CardDescription>12월 31일</CardDescription>
-        <Progress></Progress>
+          <div className="flex flex-row items-center w-[100px]">
+              <Calendar className="w-4 h-4 text-gray-500" />
+              <CardDescription className="pl-0.5">12월 31일</CardDescription>
+          </div>
+          <Progress></Progress>
       </CardFooter>
     </Card>
   );
