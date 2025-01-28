@@ -1,6 +1,6 @@
-import ProjectCard from "./ProjectCard.tsx";
-import SearchBar from "./SearchBar.tsx"
-import { Button } from "@/components/ui/button";
+import ProjectCard from "../components/home/ProjectCard.tsx";
+import SearchBar from "../components/home/SearchBar.tsx"
+import { Button } from "@/components/ui/button.tsx";
 
 export default function Layout() {
   return (
