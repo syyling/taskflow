@@ -7,20 +7,7 @@ import { Card, CardContent,
 import { Progress } from "../ui/progress.tsx";
 import OverlappingAvatars from "@/components/home/OverlappingAvatars.tsx";
 import { Calendar } from "lucide-react";
-
-interface User {
-    id: number;
-    img: string;
-    name: string;
-}
-
-interface Project {
-    name: string;
-    description: string;
-    deadline: Date;
-    progress: string;
-    users?: User;
-}
+import {Project} from "@/app/Dashboard.tsx";
 
 interface ProjectCardProps {
     project: Project;

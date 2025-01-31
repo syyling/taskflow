@@ -5,13 +5,18 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import {User} from "@/app/Dashboard.tsx";
 
-export default function OverlappingAvatars({ users }) {
 
+interface UserProps {
+    users: {user: User}[];
+}
+
+export default function OverlappingAvatars({ users } : UserProps) {
     return (
         <div className="flex items-center">
             <div className="flex -space-x-3">
-                {users.map((user, index) => (
+                {users.map((user : {user : User}, index : number) => (
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
