@@ -1,9 +1,9 @@
-import Home from './Home.tsx'
 import '../styles/App.css'
+import Dashboard from "./Dashboard.tsx";
 
 function App() {
   return (
-    <Home />
+    <Dashboard />
   )
 }
 
