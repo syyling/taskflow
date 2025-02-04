@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {Button} from "@/components/ui/button.tsx";
+import {supabase} from "@/supabase.ts";
 
 
 
@@ -50,6 +51,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         return dayDifference;
     }
 
+    async function handleHide(): Promise<void> {
+        const {data, error} = await supabase
+            .from('project')
+            .update( {"isVisible": false})
+            .eq("id",  project.id);
+
+        //Todo: 성공 실패 여부 toast로 보여주기
+    }
+
     return (
         <Card className="w-full">
             <CardHeader className="flex flex-col text-left justify-start gap-1">
@@ -61,7 +71,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuItem>수정</DropdownMenuItem>
-                            <DropdownMenuItem>삭제</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleHide}>숨기기</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
