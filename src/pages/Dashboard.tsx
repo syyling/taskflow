@@ -2,8 +2,8 @@ import ProjectCard from "../components/home/ProjectCard.tsx";
 import SearchBar from "../components/home/SearchBar.tsx";
 import { useEffect, useState } from "react";
 import { ProjectDialog } from "@/components/home/ProjectDialog.tsx";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label.tsx";
+import { Switch } from "@/components/ui/switch.tsx";
 import { getAllProjects, getVisibleProjects } from "../services/supabaseApi.js";
 import useDashBoardStore from "../store/useDashBoardStore.js";
 
