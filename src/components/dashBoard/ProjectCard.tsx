@@ -87,8 +87,7 @@ export default function ProjectCard(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <Dfeat: 프로젝트 카드 클릭 시 상세 페이지 이동 기능 추가
-                      ropdownMenuItem>수정</DropdownMenuItem>
+              <DropdownMenuItem>수정</DropdownMenuItem>
               <DropdownMenuItem onClick={handleHide}>
                 {project.isVisible ? "숨기기" : "꺼내기"}
               </DropdownMenuItem>
