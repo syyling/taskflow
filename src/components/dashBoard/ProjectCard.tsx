@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { Progress } from "../ui/progress.tsx";
-import OverlappingAvatars from "@/components/home/OverlappingAvatars.tsx";
+import OverlappingAvatars from "@/components/dashBoard/OverlappingAvatars.tsx";
 import { Calendar } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { Project } from "@/pages/Dashboard.tsx";
@@ -23,13 +23,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button.tsx";
 import { supabase } from "@/supabase.ts";
+import { updateVisible } from "@/services/supabaseApi";
+import { useQueryClient } from "@tanstack/react-query";
+import useDashBoardStore from "@/store/useDashBoardStore";
 
 interface ProjectCardProps {
   project: Project;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard(
+  { project }: ProjectCardProps,
+  { handleHidden },
+) {
+  const queryClient = useQueryClient();
+
   const [progress, setProgress] = useState(0);
+  const checked = useDashBoardStore((state) => state.checked);
 
   // Todo: project.startDate 추가 후 로직 수정
   useEffect(() => {
@@ -51,16 +60,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     const dayDifference: number = Math.ceil(
       timeDifference / (1000 * 3600 * 24),
     );
-
     return dayDifference;
   }
 
   async function handleHide(): Promise<void> {
-    const { data, error } = await supabase
-      .from("project")
-      .update({ isVisible: false })
-      .eq("id", project.id);
-
+    await updateVisible(project.id, project.isVisible);
+    queryClient.invalidateQueries({ queryKey: ["projects", checked] });
     //Todo: 성공 실패 여부 toast로 보여주기
   }
 
@@ -77,7 +82,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>수정</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleHide}>숨기기</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleHide}>
+                {project.isVisible ? "숨기기" : "꺼내기"}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

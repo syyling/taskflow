@@ -1,11 +1,12 @@
-import ProjectCard from "../components/home/ProjectCard.tsx";
-import SearchBar from "../components/home/SearchBar.tsx";
+import ProjectCard from "@/components/dashBoard/ProjectCard.tsx";
+import SearchBar from "@/components/dashBoard/SearchBar.tsx";
 import { useEffect, useState } from "react";
-import { ProjectDialog } from "@/components/home/ProjectDialog.tsx";
+import { ProjectDialog } from "@/components/dashBoard/ProjectDialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
-import { getAllProjects, getVisibleProjects } from "../services/supabaseApi.js";
+import { getProjects } from "../services/supabaseApi.js";
 import useDashBoardStore from "../store/useDashBoardStore.js";
+import { useQuery } from "@tanstack/react-query";
 
 export interface User {
   id: number;
@@ -19,6 +20,7 @@ export interface Project {
   description: string;
   deadline: Date;
   progress: string;
+  isVisible: boolean;
   users: { user: User }[];
 }
 
@@ -27,31 +29,19 @@ export default function Dashboard() {
   const checked = useDashBoardStore((state) => state.checked);
   const setChecked = useDashBoardStore((state) => state.setChecked);
 
+  const {
+    data: projectsData,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["projects", checked], // checked를 queryKey에 포함
+    queryFn: () => getProjects({ onlyVisible: !checked }), // checked 값에 따라 API 호출
+  });
+
   useEffect(() => {
-    if (checked) {
-      setAllProjects();
-    } else {
-      setVisibleProjects();
-    }
-  }, [checked]);
-
-  const setVisibleProjects = async () => {
-    try {
-      const projects = await getVisibleProjects();
-      setProjects(projects);
-    } catch (error) {
-      console.error("Error fetching projects:", error.message);
-    }
-  };
-
-  const setAllProjects = async () => {
-    try {
-      const projects = await getAllProjects();
-      setProjects(projects);
-    } catch (error) {
-      console.error("Error fetching projects:", error.message);
-    }
-  };
+    setProjects(projectsData);
+  }, [projectsData]); // projectsData가 바뀔 때만 업데이트
 
   return (
     <div className="min-h-screen w-full bg-background flex flex-col pl-2 pr-2">
@@ -77,8 +67,12 @@ export default function Dashboard() {
           </div>
 
           <div className="grid h-full gap-4 pt-3">
-            {projects.map((project: Project, index: number) => (
-              <ProjectCard key={index} project={project} />
+            {projects?.map((project: Project, index: number) => (
+              <ProjectCard
+                key={index}
+                project={project}
+                handleHidden={refetch}
+              />
             ))}
           </div>
         </div>
