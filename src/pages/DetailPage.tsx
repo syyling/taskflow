@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, FileText, GitBranch, Link, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function Home() {
+export default function DetailPage() {
   const project = {
     title: "프로젝트명",
     status: "진행중",
