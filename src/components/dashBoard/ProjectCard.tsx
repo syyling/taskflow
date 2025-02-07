@@ -26,6 +26,7 @@ import { supabase } from "@/supabase.ts";
 import { updateVisible } from "@/services/supabaseApi";
 import { useQueryClient } from "@tanstack/react-query";
 import useDashBoardStore from "@/store/useDashBoardStore";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectCardProps {
   project: Project;
@@ -36,6 +37,7 @@ export default function ProjectCard(
   { handleHidden },
 ) {
   const queryClient = useQueryClient();
+  const nav = useNavigate();
 
   const [progress, setProgress] = useState(0);
   const checked = useDashBoardStore((state) => state.checked);
@@ -69,8 +71,12 @@ export default function ProjectCard(
     //Todo: 성공 실패 여부 toast로 보여주기
   }
 
+  const onClickCard = () => {
+    nav(`/detail/${project.id}`);
+  };
+
   return (
-    <Card className="w-full">
+    <Card className="w-full" onClick={onClickCard}>
       <CardHeader className="flex flex-col text-left justify-start gap-1">
         <div className="flex justify-between w-full">
           <CardTitle className="w-[auto]">{project.name}</CardTitle>
@@ -81,7 +87,8 @@ export default function ProjectCard(
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>수정</DropdownMenuItem>
+              <Dfeat: 프로젝트 카드 클릭 시 상세 페이지 이동 기능 추가
+                      ropdownMenuItem>수정</DropdownMenuItem>
               <DropdownMenuItem onClick={handleHide}>
                 {project.isVisible ? "숨기기" : "꺼내기"}
               </DropdownMenuItem>

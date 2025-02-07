@@ -12,7 +12,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/home" element={<DetailPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/kanban" element={<Kanban />} />
       </Routes>
     </QueryClientProvider>
