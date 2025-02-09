@@ -4,9 +4,13 @@ import { useEffect, useState } from "react";
 import { ProjectDialog } from "@/components/dashBoard/ProjectDialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
-import { getProjects } from "../services/supabaseApi.js";
-import useDashBoardStore from "../store/useDashBoardStore.js";
+import { Button } from "@/components/ui/button.tsx";
+import { getProjects } from "@/fecthers/supabaseApi.tsx";
+import useDashBoardStore from "../store/useDashBoardStore.tsx";
 import { useQuery } from "@tanstack/react-query";
+import LoginModal from "@/components/modal/LoginModal.tsx";
+import SignupModal from "@/components/modal/SignupModal.tsx";
+import UserMenu from "@/components/layout/UserMenu.tsx";
 
 export interface User {
   id: number;
@@ -25,7 +29,7 @@ export interface Project {
 }
 
 export default function Dashboard() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[] | undefined>([]);
   const checked = useDashBoardStore((state) => state.checked);
   const setChecked = useDashBoardStore((state) => state.setChecked);
 
@@ -35,56 +39,78 @@ export default function Dashboard() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["projects", checked], // checked를 queryKey에 포함
-    queryFn: () => getProjects({ onlyVisible: !checked }), // checked 값에 따라 API 호출
+    queryKey: ["projects", checked],
+    queryFn: () => getProjects({ onlyVisible: !checked }),
   });
 
   useEffect(() => {
     setProjects(projectsData);
-  }, [projectsData]); // projectsData가 바뀔 때만 업데이트
+  }, [projectsData]);
 
   return (
-    <div className="min-h-screen w-full bg-background flex flex-col pl-2 pr-2">
-      <header className="flex items-center h-16 w-full border-b text-2xl ">
-        <div>TaskFlow</div>
-      </header>
-
-      <main className="flex-1 w-full">
-        <div className="container h-full pt-3">
-          <div className="flex justify-between w-full">
-            <SearchBar />
-            <div className="flex flex-row">
-              <div className="flex items-center space-x-2 pr-4">
-                <Switch
-                  id="mode"
-                  checked={checked}
-                  onCheckedChange={setChecked}
-                />
-                <Label htmlFor="mode">숨긴 프로젝트도 함께 보기</Label>
-              </div>
-              <ProjectDialog />
+    <div className="w-full min-h-screen bg-background p-3 lg:p-8">
+      {/* Glass-morphism Header */}
+      <div className="rounded-xl bg-background/60 backdrop-blur-lg border shadow-md p-3 mb-8">
+        <div className="flex flex-col space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
+          <div className="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-6 md:space-y-0">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              TaskFlow
+            </h1>
+            <div className="w-full md:w-auto md:min-w-[320px]">
+              <SearchBar />
             </div>
           </div>
 
-          <div className="grid h-full gap-4 pt-3">
-            {projects?.map((project: Project, index: number) => (
-              <ProjectCard
-                key={index}
-                project={project}
-                handleHidden={refetch}
-              />
-            ))}
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
+              <Switch
+                id="mode"
+                checked={checked}
+                onCheckedChange={setChecked}
+                className="relative inline-flex h-6 w-12 items-center rounded-full border bg-gray-300 transition-colors
+             data-[state=checked]:bg-primary"
+              >
+                <span
+                  className="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform
+               data-[state=checked]:translate-x-6 translate-x-1"
+                />
+              </Switch>
+              <Label
+                htmlFor="mode"
+                className="text-sm font-medium cursor-pointer"
+              >
+                숨긴 프로젝트 보기
+              </Label>
+            </div>
+
+            <ProjectDialog />
           </div>
         </div>
-      </main>
+      </div>
 
-      <footer className="border-t w-full">
-        <div className="container mx-auto flex h-14 items-center px-4">
-          <p className="text-sm text-muted-foreground">
-            © 2024 Your Company. All rights reserved.
+      {/* Projects Grid with Masonry-like Layout */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
+        {projects?.map((project, index) => (
+          <div
+            key={index}
+            className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <ProjectCard project={project} handleHidden={refetch} />
+          </div>
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {(!projects || projects.length === 0) && (
+        <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
+          <p className="text-xl font-medium text-muted-foreground mb-2">
+            프로젝트가 없습니다
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            새로운 프로젝트를 추가해보세요
           </p>
         </div>
-      </footer>
+      )}
     </div>
   );
 }

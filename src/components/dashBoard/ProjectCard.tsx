@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card.tsx";
 import { Progress } from "../ui/progress.tsx";
 import OverlappingAvatars from "@/components/dashBoard/OverlappingAvatars.tsx";
-import { Calendar } from "lucide-react";
+import { Calendar, MoreHorizontal } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { Project } from "@/pages/Dashboard.tsx";
 import { format } from "date-fns";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button.tsx";
 import { supabase } from "@/supabase.ts";
-import { updateVisible } from "@/services/supabaseApi";
+import { updateVisible } from "@/fecthers/supabaseApi";
 import { useQueryClient } from "@tanstack/react-query";
 import useDashBoardStore from "@/store/useDashBoardStore";
 import { useNavigate } from "react-router-dom";
@@ -76,46 +76,74 @@ export default function ProjectCard(
   };
 
   return (
-    <Card className="w-full" onClick={onClickCard}>
-      <CardHeader className="flex flex-col text-left justify-start gap-1">
-        <div className="flex justify-between w-full">
-          <CardTitle className="w-[auto]">{project.name}</CardTitle>
+    <Card
+      className="w-full hover:shadow-md transition-all duration-200 border border-gray-200"
+      onClick={onClickCard}
+    >
+      <CardHeader className="flex flex-col text-left justify-start gap-2 pb-3">
+        <div className="flex justify-between items-start w-full">
+          <div className="flex flex-col gap-1">
+            <CardTitle className="text-lg font-semibold">
+              {project.name}
+            </CardTitle>
+            <CardDescription className="flex items-center gap-1">
+              <span>{project.progress}</span>
+              <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full">
+                마감일 D-{calculateDDay(new Date(project.deadline))}
+              </span>
+            </CardDescription>
+          </div>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="w-[16px] h-[16px]">
-              <Button variant="ghost">
-                <Ellipsis />
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 hover:bg-gray-100"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>수정</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleHide}>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuItem className="cursor-pointer">
+                수정
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleHide();
+                }}
+                className="cursor-pointer"
+              >
                 {project.isVisible ? "숨기기" : "꺼내기"}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <CardDescription>
-          {project.progress +
-            " 마감일 D-" +
-            calculateDDay(new Date(project.deadline))}
-        </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col content-start text-left gap-1">
-        <CardDescription>{project.description}</CardDescription>
+
+      <CardContent className="flex flex-col content-start text-left gap-2 pb-3">
+        <CardDescription className="text-sm text-gray-600 line-clamp-2">
+          {project.description}
+        </CardDescription>
       </CardContent>
-      <CardContent className="flex flex-row content-start text-left gap-1">
+
+      <CardContent className="flex flex-row content-start text-left gap-1 pb-3">
         <OverlappingAvatars users={project.users} />
       </CardContent>
-      <CardFooter className="flex">
-        <div className="flex flex-row items-center w-[120px]">
-          <Calendar className="w-4 h-4 text-gray-500" />
-          <CardDescription className="pl-0.5">
-            {project.deadline
-              ? format(project.deadline, "yyyy-MM-dd")
-              : undefined}
-          </CardDescription>
+
+      <CardFooter className="flex flex-col gap-2 pt-2">
+        <div className="flex justify-between items-center w-full">
+          <div className="flex items-center space-x-2 text-gray-500">
+            <Calendar className="w-4 h-4" />
+            <CardDescription>
+              {project.deadline
+                ? format(new Date(project.deadline), "yyyy-MM-dd")
+                : "날짜 미정"}
+            </CardDescription>
+          </div>
+          <span className="text-sm font-medium text-gray-600">{progress}%</span>
         </div>
-        <Progress value={progress}></Progress>
+        <Progress value={progress} className="h-2" />
       </CardFooter>
     </Card>
   );
