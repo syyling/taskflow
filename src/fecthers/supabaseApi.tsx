@@ -1,8 +1,9 @@
 import { supabase } from "@/supabase.ts";
+import { Project } from "@/pages/Dashboard.tsx";
 
-export const getProjects = async ({ onlyVisible = true } = {}) => {
-  console.log("조회");
-  console.log(onlyVisible);
+export const getProjects = async ({ onlyVisible = true } = {}): Promise<
+  Project[] | null
+> => {
   let query = supabase
     .from("project")
     .select(
@@ -13,7 +14,7 @@ export const getProjects = async ({ onlyVisible = true } = {}) => {
     query = query.eq("isVisible", true);
   }
 
-  const { data: projects, error } = await query;
+  const { data: projects, error } = await query.returns<Project[]>();
 
   if (error) throw error;
   return projects;
