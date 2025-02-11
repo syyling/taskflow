@@ -98,7 +98,7 @@ button:focus-visible {
     --secondary-foreground: 240 4% 25%;
     --muted: 240 3% 88%;
     --muted-foreground: 240 3% 45%;
-    --accent: 240 5% 50%; /* 포인트 컬러: 약간 더 진한 그레이 */
+    --accent: 240 5% 80%; /* 포인트 컬러: 약간 더 진한 그레이 */
     --accent-foreground: 0 0% 10%;
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
