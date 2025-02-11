@@ -10,7 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Check,
+  ChevronsUpDown,
+  PlusCircle,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -42,6 +47,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useQueryClient } from "@tanstack/react-query";
+import useDashBoardStore from "@/store/useDashBoardStore.tsx";
 
 interface UserOption {
   value: number;
@@ -76,6 +83,7 @@ const progressOptions = [
 ] as const;
 
 export function ProjectDialog() {
+  const queryClient = useQueryClient();
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState<boolean>(false);
   const [users, setUsers] = useState<UserOption[]>([]);
@@ -86,6 +94,8 @@ export function ProjectDialog() {
     selectedUsers: [],
     progress: "",
   });
+
+  const checked = useDashBoardStore((state) => state.checked);
 
   useEffect(() => {
     queryData();
@@ -127,6 +137,8 @@ export function ProjectDialog() {
           .select();
       });
     }
+
+    queryClient.invalidateQueries({ queryKey: ["projects", checked] });
   };
 
   const handleUserSelect = (userValue: number) => {
@@ -155,67 +167,61 @@ export function ProjectDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="h-[30px]">+ 새프로젝트 추가</Button>
+        <Button variant="outline" className="gap-2">
+          <PlusCircle className="h-4 w-4" />
+          새프로젝트 추가
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>프로젝트 추가</DialogTitle>
-          {/*<DialogDescription>*/}
-          {/*    Make changes to your profile here. Click save when you're done.*/}
-          {/*</DialogDescription>*/}
+          <DialogTitle className="text-xl font-semibold">
+            프로젝트 추가
+          </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              제목
-            </Label>
+        <div className="space-y-6 py-4">
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="name">제목</Label>
             <Input
               id="name"
-              className="col-span-3"
+              placeholder="프로젝트 제목을 입력하세요"
+              className="w-full"
               value={projectData.name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleInputChange("name", e.target.value)
-              }
+              onChange={(e) => handleInputChange("name", e.target.value)}
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              설명
-            </Label>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="description">설명</Label>
             <Input
               id="description"
-              className="col-span-3"
+              placeholder="프로젝트 설명을 입력하세요"
+              className="w-full"
               value={projectData.description}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleInputChange("description", e.target.value)
-              }
+              onChange={(e) => handleInputChange("description", e.target.value)}
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="deadline" className="text-right">
-              마감일
-            </Label>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="deadline">마감일</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-[280px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground",
+                    "w-full justify-start text-left font-normal",
+                    !projectData.deadline && "text-muted-foreground",
                   )}
                 >
-                  <CalendarIcon className="mr-0 h-3 w-3" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {projectData.deadline ? (
                     format(projectData.deadline, "yyyy-MM-dd")
                   ) : (
-                    <span>Pick a date</span>
+                    <span>날짜를 선택하세요</span>
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={projectData.deadline}
@@ -226,17 +232,15 @@ export function ProjectDialog() {
             </Popover>
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="user" className="text-right">
-              참여자
-            </Label>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="user">참여자</Label>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="w-[280px] justify-between"
+                  className="w-full justify-between"
                 >
                   {projectData.selectedUsers.length > 0
                     ? projectData.selectedUsers
@@ -245,15 +249,15 @@ export function ProjectDialog() {
                             users.find((user) => user.value === value)?.label,
                         )
                         .join(", ")
-                    : "Select users..."}
-                  <ChevronsUpDown className="opacity-50" />
+                    : "참여자를 선택하세요"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-0">
+              <PopoverContent className="w-full p-0">
                 <Command>
-                  <CommandInput placeholder="Search user..." className="h-9" />
+                  <CommandInput placeholder="참여자 검색..." className="h-9" />
                   <CommandList>
-                    <CommandEmpty>사용자가 없습니다.</CommandEmpty>
+                    <CommandEmpty>검색 결과가 없습니다</CommandEmpty>
                     <CommandGroup>
                       {users.map((user) => (
                         <CommandItem
@@ -261,13 +265,14 @@ export function ProjectDialog() {
                           value={user.label}
                           onSelect={() => {
                             handleUserSelect(user.value);
-                            setOpen(false); // Close popover after selecting
+                            setOpen(false);
                           }}
+                          className="flex items-center justify-between"
                         >
                           {user.label}
                           <Check
                             className={cn(
-                              "ml-auto",
+                              "h-4 w-4",
                               projectData.selectedUsers.includes(user.value)
                                 ? "opacity-100"
                                 : "opacity-0",
@@ -282,31 +287,27 @@ export function ProjectDialog() {
             </Popover>
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="progress" className="text-right">
-              진행 상황
-            </Label>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="progress">진행 상황</Label>
             <Select
               onValueChange={(value) => handleInputChange("progress", value)}
             >
-              <SelectTrigger className="w-[280px]">
-                <SelectValue placeholder="" />
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="진행 상황을 선택하세요" />
               </SelectTrigger>
               <SelectContent>
-                {progressOptions.map((progressOption) => (
-                  <SelectItem
-                    key={progressOption.id}
-                    value={progressOption.label}
-                  >
-                    {progressOption.label}
+                {progressOptions.map((option) => (
+                  <SelectItem key={option.id} value={option.label}>
+                    {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
         </div>
+
         <DialogFooter>
-          <Button type="submit" onClick={handleSave}>
+          <Button onClick={handleSave} className="w-full sm:w-auto">
             저장하기
           </Button>
         </DialogFooter>
