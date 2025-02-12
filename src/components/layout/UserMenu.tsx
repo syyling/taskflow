@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { User } from "lucide-react";
 import {
   DropdownMenu,
@@ -9,23 +9,27 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import LoginModal from "@/components/modal/LoginModal.tsx";
 import SignupModal from "@/components/modal/SignupModal.tsx";
+import { useAuth } from "@/contexts/AuthContext.tsx";
+import { supabase } from "@/supabase.ts";
 
-interface UserMenuProps {
-  isAuthenticated: boolean;
-  onLogout: () => void;
-}
-
-const UserMenu: React.FC<UserMenuProps> = ({ isAuthenticated }) => {
+const UserMenu = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { user } = useAuth();
 
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
-      //await onLogout();
-    } catch (error) {
-      console.error("로그아웃 중 오류가 발생했습니다:", error);
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        throw new Error(error.message); // 오류 발생 시 예외 던지기
+      }
+      window.location.reload();
+    } catch (err) {
+      alert(`로그아웃 실패: ${(err as Error).message}`);
     } finally {
       setIsLoggingOut(false);
     }
@@ -38,7 +42,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isAuthenticated }) => {
           <User className="h-5 w-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          {isAuthenticated ? (
+          {user ? (
             <>
               <DropdownMenuItem>프로필</DropdownMenuItem>
               <DropdownMenuItem>설정</DropdownMenuItem>

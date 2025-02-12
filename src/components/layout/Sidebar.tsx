@@ -3,6 +3,7 @@ import { LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import UserMenu from "@/components/layout/UserMenu.tsx";
 import useSidebarStore from "@/store/useSidebarStore.tsx";
+import { useAuth } from "@/contexts/AuthContext.tsx";
 
 interface MenuItem {
   icon: React.ElementType;
@@ -17,7 +18,6 @@ interface SidebarProps {
 const Sidebar = () => {
   const isSidebarOpen = useSidebarStore((state) => state.isSidebarOpen);
   const setIsSidebarOpen = useSidebarStore((state) => state.setIsSidebarOpen);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const menuItems: MenuItem[] = [
     { icon: LayoutDashboard, label: "대시보드", href: "/" },
   ];
@@ -43,7 +43,7 @@ const Sidebar = () => {
       >
         {/* 메뉴 항목들 */}
         <div className="p-4">
-          <UserMenu isAuthenticated={isAuthenticated} />
+          <UserMenu />
           <div className="mt-4">
             {menuItems.map((item) => (
               <a

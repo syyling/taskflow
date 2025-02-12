@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoginModal from "@/components/modal/LoginModal.tsx";
 import SignupModal from "@/components/modal/SignupModal.tsx";
 import UserMenu from "@/components/layout/UserMenu.tsx";
+import { useAuth } from "@/contexts/AuthContext.tsx";
 
 export interface User {
   id: number;
@@ -32,6 +33,7 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
   const checked = useDashBoardStore((state) => state.checked);
   const setChecked = useDashBoardStore((state) => state.setChecked);
+  const { user } = useAuth();
 
   const {
     data: projectsData,
@@ -41,6 +43,7 @@ export default function Dashboard() {
   } = useQuery({
     queryKey: ["projects", checked],
     queryFn: () => getProjects({ onlyVisible: !checked }),
+    enabled: !!user,
   });
 
   useEffect(() => {
@@ -56,35 +59,39 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
               TaskFlow
             </h1>
-            <div className="w-full md:w-auto md:min-w-[320px]">
-              <SearchBar />
-            </div>
+            {user && (
+              <div className="w-full md:w-auto md:min-w-[320px]">
+                <SearchBar />
+              </div>
+            )}
           </div>
 
-          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
-            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
-              <Switch
-                id="mode"
-                checked={checked}
-                onCheckedChange={setChecked}
-                className="relative inline-flex h-6 w-12 items-center rounded-full border bg-gray-300 transition-colors
+          {user && (
+            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
+              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
+                <Switch
+                  id="mode"
+                  checked={checked}
+                  onCheckedChange={setChecked}
+                  className="relative inline-flex h-6 w-12 items-center rounded-full border bg-gray-300 transition-colors
              data-[state=checked]:bg-primary"
-              >
-                <span
-                  className="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform
+                >
+                  <span
+                    className="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform
                data-[state=checked]:translate-x-6 translate-x-1"
-                />
-              </Switch>
-              <Label
-                htmlFor="mode"
-                className="text-sm font-medium cursor-pointer"
-              >
-                숨긴 프로젝트 보기
-              </Label>
-            </div>
+                  />
+                </Switch>
+                <Label
+                  htmlFor="mode"
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  숨긴 프로젝트 보기
+                </Label>
+              </div>
 
-            <ProjectDialog />
-          </div>
+              <ProjectDialog />
+            </div>
+          )}
         </div>
       </div>
 
@@ -101,13 +108,23 @@ export default function Dashboard() {
       </div>
 
       {/* Empty State */}
-      {(!projects || projects.length === 0) && (
+      {user && (!projects || projects.length === 0) && (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
           <p className="text-xl font-medium text-muted-foreground mb-2">
             프로젝트가 없습니다
           </p>
           <p className="text-sm text-muted-foreground mb-6">
             새로운 프로젝트를 추가해보세요
+          </p>
+        </div>
+      )}
+      {!user && (
+        <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
+          <p className="text-xl font-medium text-muted-foreground mb-2">
+            프로젝트가 기다리고 있어요!
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            로그인하고 나만의 프로젝트를 관리해보세요
           </p>
         </div>
       )}

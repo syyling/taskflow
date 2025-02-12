@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { supabase } from "@/supabase.ts";
 
 interface formData {
   email: string;
@@ -18,14 +19,13 @@ interface formData {
   confirmPassword: string;
 }
 
-const SignupModal = () => {
+const SignupModal = ({ isOpen, onOpenChange }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,17 +68,21 @@ const SignupModal = () => {
     }
 
     try {
-      // TODO: 실제 회원가입 API 호출 로직 구현
       console.log("Signup attempt with:", formData);
       // 회원가입 성공 시
-      setIsOpen(false);
+      const { error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+      // TODO: 성공 후 toast
+      onOpenChange(false);
     } catch (err) {
       setError("회원가입 중 오류가 발생했습니다.");
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">회원가입</Button>
       </DialogTrigger>
@@ -133,7 +137,7 @@ const SignupModal = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => setIsOpen(false)}
+              onClick={() => onOpenChange(false)}
             >
               취소
             </Button>
