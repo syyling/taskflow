@@ -50,11 +50,11 @@ export default function DetailPage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen w-full bg-background flex flex-col px-4"
+      className="min-h-screen w-full bg-background flex flex-col px-4 justify-items-center"
     >
-      <div className="min-h-screen w-full bg-background flex flex-col px-4">
-        <main className="flex-1 w-full mx-auto">
-          <div className="container h-full py-6 space-y-8">
+      <div className="min-h-screen w-full bg-background flex flex-col px-4 justify-items-center">
+        <main className="flex-1 w-full justify-items-center">
+          <div className="container h-full py-6 space-y-8 items-center">
             {/* 프로젝트 헤더 */}
             <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:items-center">
               <div className="space-y-3">
