@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "./Header.tsx";
 import Sidebar from "./Sidebar.tsx";
 import useSidebarStore from "@/store/useSidebarStore.tsx";
+import { Toaster } from "@/components/ui/toaster";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
         }`}
       >
         {children}
+        <Toaster />
       </main>
     </div>
   );

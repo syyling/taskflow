@@ -11,8 +11,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/supabase.ts";
+import useSidebarStore from "@/store/useSidebarStore.tsx";
+import { useToast } from "@/hooks/use-toast.ts";
+
+const AUTH_ERROR_MESSAGES = {
+  TITLE: "로그인 실패",
+  SUPABASE_MESSAGE: "Invalid login credentials",
+  INVALID_CREDENTIALS: "비밀번호가 올바르지 않습니다. 다시 시도해주세요.",
+  UNKNOWN_ERROR: "로그인 중 오류가 발생했습니다. 다시 시도해주세요.",
+};
 
 const LoginModal = ({ isOpen, onOpenChange }) => {
+  const { toast } = useToast();
+  const setIsSidebarOpen = useSidebarStore((state) => state.setIsSidebarOpen);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,14 +36,24 @@ const LoginModal = ({ isOpen, onOpenChange }) => {
         password,
       });
 
-      //Todo: alert -> toast로 변경
       if (error) {
-        alert(`로그인 실패: ${error.message}`);
+        if (error.message.includes(AUTH_ERROR_MESSAGES.SUPABASE_MESSAGE)) {
+          toast({
+            variant: "destructive",
+            title: AUTH_ERROR_MESSAGES.TITLE,
+            description: AUTH_ERROR_MESSAGES.INVALID_CREDENTIALS,
+          });
+        }
         return;
       }
       onOpenChange(false);
+      setIsSidebarOpen();
     } catch (err) {
-      alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+      toast({
+        variant: "destructive",
+        title: AUTH_ERROR_MESSAGES.TITLE,
+        description: AUTH_ERROR_MESSAGES.UNKNOWN_ERROR,
+      });
     }
   };
 
