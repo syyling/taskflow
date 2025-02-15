@@ -1,5 +1,5 @@
 import { supabase } from "@/supabase.ts";
-import { Project } from "@/pages/Dashboard.tsx";
+import { Project } from "@/types/type.tsx";
 
 export const getProjects = async ({ onlyVisible = true } = {}): Promise<
   Project[] | null

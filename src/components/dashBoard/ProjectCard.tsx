@@ -10,7 +10,7 @@ import { Progress } from "../ui/progress.tsx";
 import OverlappingAvatars from "@/components/dashBoard/OverlappingAvatars.tsx";
 import { Calendar, MoreHorizontal } from "lucide-react";
 import { Ellipsis } from "lucide-react";
-import { Project } from "@/pages/Dashboard.tsx";
+import { Project } from "@/types/type.tsx";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import {

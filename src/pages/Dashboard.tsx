@@ -4,30 +4,11 @@ import { useEffect, useState } from "react";
 import { ProjectDialog } from "@/components/dashBoard/ProjectDialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
-import { Button } from "@/components/ui/button.tsx";
 import { getProjects } from "@/fecthers/supabaseApi.tsx";
 import useDashBoardStore from "../store/useDashBoardStore.tsx";
 import { useQuery } from "@tanstack/react-query";
-import LoginModal from "@/components/modal/LoginModal.tsx";
-import SignupModal from "@/components/modal/SignupModal.tsx";
-import UserMenu from "@/components/layout/UserMenu.tsx";
 import { useAuth } from "@/contexts/AuthContext.tsx";
-
-export interface User {
-  id: number;
-  img: string;
-  name: string;
-}
-
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
-  deadline: Date;
-  progress: string;
-  isVisible: boolean;
-  users: { user: User }[];
-}
+import { Project } from "@/types/type.tsx";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);

@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { User } from "@/pages/Dashboard.tsx";
+import { User } from "@/types/type.tsx";
 
 interface UserProps {
   users: { user: User }[];
