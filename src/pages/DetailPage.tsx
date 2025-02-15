@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import ProjectCard from "@/components/detail/ProgressCard.tsx";
 import ProgressCard from "@/components/detail/ProgressCard.tsx";
 import { motion } from "framer-motion";
+import MemberCard from "@/components/detail/MemberCard.tsx";
+import TechStackCard from "@/components/detail/TechStackCard.tsx";
 
 export default function DetailPage() {
   const project = {
@@ -24,8 +26,8 @@ export default function DetailPage() {
     startDate: "2024.02",
     endDate: "2024.06",
     team: [
-      { name: "김개발", role: "프론트엔드" },
-      { name: "이백엔드", role: "백엔드" },
+      { name: "김서영", role: "FRONTEND", authLevel: "ADMIN" },
+      { name: "박솔", role: "BACKEND", authLevel: "VIEWER" },
     ],
     features: ["기능 1", "기능 2", "기능 3"],
     stack: {
@@ -50,7 +52,7 @@ export default function DetailPage() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen w-full bg-background flex flex-col px-4 justify-items-center"
+      className="min-h-screen bg-background flex flex-col px-4 justify-items-center"
     >
       <div className="min-h-screen w-full bg-background flex flex-col px-4 justify-items-center">
         <main className="flex-1 w-full justify-items-center">
@@ -99,14 +101,13 @@ export default function DetailPage() {
                 </Badge>
               </div>
             </div>
-
-            {/* 진행률 */}
+            {/* Progress Card - Full Width */}
             <ProgressCard project={project} />
 
-            {/* 프로젝트 상세 정보 그리드 */}
+            {/* Main Content Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 프로젝트 정보 */}
-              <Card className="w-full">
+              {/* Left Column */}
+              <Card>
                 <CardContent className="pt-6 space-y-8">
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold">프로젝트 설명</h3>
@@ -119,7 +120,7 @@ export default function DetailPage() {
                     <ul className="text-sm text-muted-foreground space-y-2">
                       {project.features.map((feature, index) => (
                         <li key={index} className="flex items-start gap-2">
-                          <span className="text-primary mt-1.5">•</span>
+                          <span className="text-primary mt-1">•</span>
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -128,77 +129,14 @@ export default function DetailPage() {
                 </CardContent>
               </Card>
 
-              {/* 팀 & 기술 스택 */}
+              {/* Right Column */}
               <div className="space-y-6">
-                {/* 팀 정보 */}
-                <Card>
-                  <CardContent className="pt-6">
-                    <h3 className="text-xl font-semibold mb-4">팀 구성원</h3>
-                    <div className="divide-y divide-border">
-                      {project.team.map((member, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-4 py-3 first:pt-0 last:pb-0"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                            <Users className="w-5 h-5" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{member.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {member.role}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* 기술 스택 */}
-                <Card>
-                  <CardContent className="pt-6">
-                    <h3 className="text-xl font-semibold mb-6">기술 스택</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-medium text-muted-foreground mb-3">
-                          프론트엔드
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.stack.frontend.map((tech, index) => (
-                            <Badge
-                              key={index}
-                              variant="secondary"
-                              className="py-1 px-3"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-muted-foreground mb-3">
-                          백엔드
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.stack.backend.map((tech, index) => (
-                            <Badge
-                              key={index}
-                              variant="secondary"
-                              className="py-1 px-3"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <MemberCard project={project} />
+                <TechStackCard project={project} />
               </div>
             </div>
 
-            {/* 타임라인 */}
+            {/* Timeline */}
             <Card>
               <CardContent className="pt-6">
                 <h3 className="text-xl font-semibold mb-6">
