@@ -1,14 +1,15 @@
-import ProjectCard from "@/components/dashBoard/ProjectCard.tsx";
-import SearchBar from "@/components/dashBoard/SearchBar.tsx";
-import { useEffect, useState } from "react";
-import { ProjectDialog } from "@/components/dashBoard/ProjectDialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
-import { Switch } from "@/components/ui/switch.tsx";
-import { getProjects } from "@/fecthers/supabaseApi.tsx";
-import useDashBoardStore from "../store/useDashBoardStore.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/contexts/AuthContext.tsx";
-import { Project } from "@/types/type.tsx";
+import ProjectCard from '@/components/dashBoard/ProjectCard.tsx';
+import SearchBar from '@/components/dashBoard/SearchBar.tsx';
+import { useEffect, useState } from 'react';
+import { ProjectDialog } from '@/components/dashBoard/ProjectDialog.tsx';
+import { Label } from '@/components/ui/label.tsx';
+import { Switch } from '@/components/ui/switch.tsx';
+import { fetchProjects } from '@/fecthers/project/project.tsx';
+import useDashBoardStore from '../store/useDashBoardStore.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/contexts/AuthContext.tsx';
+import { Project } from '@/types/project.model.tsx';
+import { mapProjectDTOsToProjects } from '@/mappers/project.mapper.ts';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
@@ -22,13 +23,13 @@ export default function Dashboard() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["projects", checked],
-    queryFn: () => getProjects({ onlyVisible: !checked }),
+    queryKey: ['projects', checked],
+    queryFn: () => fetchProjects({ onlyVisible: !checked }),
     enabled: !!user,
   });
 
   useEffect(() => {
-    setProjects(projectsData);
+    setProjects(mapProjectDTOsToProjects(projectsData));
   }, [projectsData]);
 
   return (
@@ -62,10 +63,7 @@ export default function Dashboard() {
                data-[state=checked]:translate-x-6 translate-x-1"
                   />
                 </Switch>
-                <Label
-                  htmlFor="mode"
-                  className="text-sm font-medium cursor-pointer"
-                >
+                <Label htmlFor="mode" className="text-sm font-medium cursor-pointer">
                   숨긴 프로젝트 보기
                 </Label>
               </div>
@@ -79,10 +77,7 @@ export default function Dashboard() {
       {/* Projects Grid with Masonry-like Layout */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
-          <div
-            key={index}
-            className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
-          >
+          <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
             <ProjectCard project={project} handleHidden={refetch} />
           </div>
         ))}
@@ -91,22 +86,14 @@ export default function Dashboard() {
       {/* Empty State */}
       {user && (!projects || projects.length === 0) && (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
-          <p className="text-xl font-medium text-muted-foreground mb-2">
-            프로젝트가 없습니다
-          </p>
-          <p className="text-sm text-muted-foreground mb-6">
-            새로운 프로젝트를 추가해보세요
-          </p>
+          <p className="text-xl font-medium text-muted-foreground mb-2">프로젝트가 없습니다</p>
+          <p className="text-sm text-muted-foreground mb-6">새로운 프로젝트를 추가해보세요</p>
         </div>
       )}
       {!user && (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
-          <p className="text-xl font-medium text-muted-foreground mb-2">
-            프로젝트가 기다리고 있어요!
-          </p>
-          <p className="text-sm text-muted-foreground mb-6">
-            로그인하고 나만의 프로젝트를 관리해보세요
-          </p>
+          <p className="text-xl font-medium text-muted-foreground mb-2">프로젝트가 기다리고 있어요!</p>
+          <p className="text-sm text-muted-foreground mb-6">로그인하고 나만의 프로젝트를 관리해보세요</p>
         </div>
       )}
     </div>
