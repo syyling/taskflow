@@ -1,15 +1,6 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar.tsx";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { User } from "@/types/type.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { User } from '@/types/project.model.tsx';
 
 interface UserProps {
   users: { user: User }[];
@@ -23,13 +14,10 @@ export default function OverlappingAvatars({ users }: UserProps) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Avatar
-                  key={index}
-                  className="w-7 h-7 border-2 border-white shadow-md"
-                >
+                <Avatar key={index} className="w-7 h-7 border-2 border-white shadow-md">
                   <AvatarImage src={user.user.img} />
                   <AvatarFallback className="bg-gray-200 text-gray-500 text-xs">
-                    {user.user.name ? user.user.name.charAt(0) : "?"}
+                    {user.user.name ? user.user.name.charAt(0) : '?'}
                   </AvatarFallback>
                 </Avatar>
               </TooltipTrigger>
