@@ -77,7 +77,10 @@ export default function Dashboard() {
       {/* Projects Grid with Masonry-like Layout */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
-          <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+          <div
+            key={index}
+            className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          >
             <ProjectCard project={project} handleHidden={refetch} />
           </div>
         ))}
@@ -92,8 +95,12 @@ export default function Dashboard() {
       )}
       {!user && (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
-          <p className="text-xl font-medium text-muted-foreground mb-2">프로젝트가 기다리고 있어요!</p>
-          <p className="text-sm text-muted-foreground mb-6">로그인하고 나만의 프로젝트를 관리해보세요</p>
+          <p className="text-xl font-medium text-muted-foreground mb-2">
+            프로젝트가 기다리고 있어요!
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            로그인하고 나만의 프로젝트를 관리해보세요
+          </p>
         </div>
       )}
     </div>
