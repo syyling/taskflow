@@ -26,10 +26,22 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 import { AuthLevel, Role } from "@/types/enums.tsx";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 const MemberCard = ({ project }) => {
   const [projectTeam, setProjectTeam] = useState(project.team);
+
+  const handleMemberAddButton = () => {
+    setProjectTeam([
+      ...projectTeam,
+      {
+        name: "",
+        role: "",
+        authLevel: "",
+      },
+    ],)
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild className="w-full">
@@ -43,10 +55,12 @@ const MemberCard = ({ project }) => {
                   className="flex items-center gap-3 py-2 first:pt-0 last:pb-0"
                 >
                   <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-                    <Users className="w-4 h-4" />
+                    <Users className="w-4 h-4 text-white"/>
                   </div>
-                  <div>
-                    <p className="font-medium text-sm">{member.name}</p>
+                  <div className="flex flex-col items-start">
+                    <p className="font-medium text-sm">
+                      {member.name}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {member.role}
                     </p>
@@ -57,10 +71,10 @@ const MemberCard = ({ project }) => {
           </CardContent>
         </Card>
       </SheetTrigger>
-      <SheetContent className="sm:max-w-[400px] [&>button]:hidden">
+      <SheetContent className="sm:max-w-[400px] [&>button]:hidden overflow-auto">
         <SheetHeader>
           <div className="flex items-center justify-between mb-4">
-            <SheetTitle className="text-lg">팀 구성원 수정</SheetTitle>
+            <SheetTitle className="text-lg">팀 구성원</SheetTitle>
             <Button size="sm" className="h-7 text-xs font-medium">
               저장
             </Button>
@@ -82,7 +96,7 @@ const MemberCard = ({ project }) => {
                   <div className="grid gap-3">
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <UserCircle className="h-4 w-4" />
+                        <UserCircle className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label
@@ -101,7 +115,7 @@ const MemberCard = ({ project }) => {
 
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <IdCard className="h-4 w-4" />
+                        <IdCard className="h-4 w-4  text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label
@@ -130,7 +144,7 @@ const MemberCard = ({ project }) => {
 
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <Shield className="h-4 w-4" />
+                        <Shield className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label
@@ -166,19 +180,7 @@ const MemberCard = ({ project }) => {
               className="w-full h-8 text-sm"
               variant="secondary"
               size="sm"
-              CopyonClick={() =>
-                setProjectTeam({
-                  ...projectTeam,
-                  team: [
-                    ...projectTeam.team,
-                    {
-                      name: "",
-                      role: "",
-                      authLevel: "",
-                    },
-                  ],
-                })
-              }
+              onClick={handleMemberAddButton}
             >
               팀원 추가
             </Button>
