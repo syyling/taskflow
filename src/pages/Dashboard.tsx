@@ -1,8 +1,6 @@
 import ProjectCard from '@/components/dashBoard/ProjectCard.tsx';
 import SearchBar from '@/components/dashBoard/SearchBar.tsx';
 import { useEffect, useState } from 'react';
-import { ProjectDialog } from '@/components/dashBoard/ProjectDialog.tsx';
-import { Label } from '@/components/ui/label.tsx';
 import { Switch } from '@/components/ui/switch.tsx';
 import { fetchProjects } from '@/fecthers/project/project.tsx';
 import useDashBoardStore from '../store/useDashBoardStore.tsx';
@@ -10,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext.tsx';
 import { Project } from '@/types/project.model.tsx';
 import { mapProjectDTOsToProjects } from '@/mappers/project.mapper.ts';
+import {Eye, Plus} from "lucide-react";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
@@ -33,42 +32,45 @@ export default function Dashboard() {
   }, [projectsData]);
 
   return (
-    <div className="w-full min-h-screen bg-background p-3 lg:p-8">
+    <div className="w-full min-h-screen bg-background ">
       {/* Glass-morphism Header */}
-      <div className="rounded-xl bg-background/60 backdrop-blur-lg border shadow-md p-3 mb-8">
+      <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg shadow-lg p-4 mb-8 rounded-xl">
         <div className="flex flex-col space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-6 md:space-y-0">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h1
+              className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent">
               TaskFlow
             </h1>
             {user && (
               <div className="w-full md:w-auto md:min-w-[320px]">
-                <SearchBar />
+                <div className="bg-white dark:bg-gray-700 shadow-sm rounded-lg">
+                  <SearchBar/>
+                </div>
               </div>
             )}
           </div>
 
           {user && (
-            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
-              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
+            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+              {/* 토글 스위치 */}
+              <div className="flex items-center gap-2 h-10 px-3">
                 <Switch
-                  id="mode"
                   checked={checked}
                   onCheckedChange={setChecked}
-                  className="relative inline-flex h-6 w-12 items-center rounded-full border bg-gray-300 transition-colors
-             data-[state=checked]:bg-primary"
+                  className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 data-[state=checked]:bg-primary"
                 >
                   <span
-                    className="inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform
-               data-[state=checked]:translate-x-6 translate-x-1"
-                  />
+                    className="inline-block h-5 w-5 transform rounded-full bg-white transition-transform data-[state=checked]:translate-x-5 translate-x-0.5"/>
                 </Switch>
-                <Label htmlFor="mode" className="text-sm font-medium cursor-pointer">
-                  숨긴 프로젝트 보기
-                </Label>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-200">숨긴 프로젝트 보기</span>
               </div>
 
-              <ProjectDialog />
+              {/* 새 프로젝트 버튼 */}
+              <button
+                className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
+                <Plus className="w-4 h-4"/>
+                <span className="text-sm font-medium">새 프로젝트</span>
+              </button>
             </div>
           )}
         </div>
@@ -78,7 +80,7 @@ export default function Dashboard() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
           <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-            <ProjectCard project={project} handleHidden={refetch} />
+            <ProjectCard project={project} handleHidden={refetch}/>
           </div>
         ))}
       </div>
