@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
-import UserMenu from "@/components/layout/UserMenu.tsx";
 import useSidebarStore from "@/store/useSidebarStore.tsx";
-import { useAuth } from "@/contexts/AuthContext.tsx";
 
 interface MenuItem {
   icon: React.ElementType;
   label: string;
   href: string;
-}
-
-interface SidebarProps {
-  onCollapse: () => void;
 }
 
 const Sidebar = () => {
@@ -43,7 +37,6 @@ const Sidebar = () => {
       >
         {/* 메뉴 항목들 */}
         <div className="p-4">
-          <UserMenu />
           <div className="mt-4">
             {menuItems.map((item) => (
               <a
