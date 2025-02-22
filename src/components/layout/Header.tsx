@@ -9,26 +9,28 @@ interface HeaderProps {
 }
 
 const Header = ({ onMenuClick }: HeaderProps) => {
-  const isSidebarCollapsed = useSidebarStore(
-    (state) => state.isSidebarCollapsed,
-  );
+  const isSidebarCollapsed = useSidebarStore((state) => state.isSidebarCollapsed);
 
   return (
-    <div
-      className={`top-0 right-0 left-0 h-8 bg-background transition-all duration-300 ${
+    <header
+      className={`top-0 right-0 left-0 h-8 bg-background ${
         isSidebarCollapsed ? "left-0" : "left-64"
       }`}
     >
-      <div className="flex h-full items-center px-4">
-        <button
-          onClick={onMenuClick}
-          className="p-2 hover:bg-muted rounded-full"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-        <div className="flex-1" />
+      <div className="flex items-center justify-between h-full">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onMenuClick}
+            className="p-1.5 hover:bg-muted/60 rounded-md ml-2"
+          >
+            <Menu className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="mr-1">
+          <UserMenu />
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
 

@@ -27,11 +27,11 @@ const UserMenu = () => {
       if (error) {
         throw new Error(error.message); // 오류 발생 시 예외 던지기
       }
-      window.location.reload();
     } catch (err) {
       alert(`로그아웃 실패: ${(err as Error).message}`);
     } finally {
       setIsLoggingOut(false);
+      window.location.reload();
     }
   };
 
