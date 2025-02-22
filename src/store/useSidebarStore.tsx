@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { useState } from "react";
+import { SidebarState } from "@/types/stores.tsx";
 
-const useSidebarStore = create((set) => ({
+const useSidebarStore = create<SidebarState>((set) => ({
   isSidebarOpen: false,
   isSidebarCollapsed: false,
 
