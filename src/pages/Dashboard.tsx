@@ -10,12 +10,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext.tsx';
 import { Project } from '@/types/project.model.tsx';
 import { mapProjectDTOsToProjects } from '@/mappers/project.mapper.ts';
-import {Eye, Plus} from "lucide-react";
+import { Eye, Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
-  const checked = useDashBoardStore((state) => state.checked);
-  const setChecked = useDashBoardStore((state) => state.setChecked);
+  const checked = useDashBoardStore(state => state.checked);
+  const setChecked = useDashBoardStore(state => state.setChecked);
   const { user } = useAuth();
 
   const {
@@ -24,8 +24,8 @@ export default function Dashboard() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['projects', checked],
-    queryFn: () => fetchProjects({ onlyVisible: !checked }),
+    queryKey: ['projects', checked, user.id],
+    queryFn: () => fetchProjects(!checked, user.id),
     enabled: !!user,
   });
 
@@ -39,14 +39,13 @@ export default function Dashboard() {
       <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg shadow-lg p-4 mb-8 rounded-xl">
         <div className="flex flex-col space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-6 md:space-y-0">
-            <h1
-              className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent">
               TaskFlow
             </h1>
             {user && (
               <div className="w-full md:w-auto md:min-w-[320px]">
                 <div className="bg-white dark:bg-gray-700 shadow-sm rounded-lg">
-                  <SearchBar/>
+                  <SearchBar />
                 </div>
               </div>
             )}
@@ -61,16 +60,14 @@ export default function Dashboard() {
                   onCheckedChange={setChecked}
                   className="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-200 dark:bg-gray-700 data-[state=checked]:bg-primary"
                 >
-                  <span
-                    className="inline-block h-5 w-5 transform rounded-full bg-white transition-transform data-[state=checked]:translate-x-5 translate-x-0.5"/>
+                  <span className="inline-block h-5 w-5 transform rounded-full bg-white transition-transform data-[state=checked]:translate-x-5 translate-x-0.5" />
                 </Switch>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-200">숨긴 프로젝트 보기</span>
               </div>
 
               {/* 새 프로젝트 버튼 */}
-              <button
-                className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
-                <Plus className="w-4 h-4"/>
+              <button className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
+                <Plus className="w-4 h-4" />
                 <span className="text-sm font-medium">새 프로젝트</span>
               </button>
             </div>
@@ -82,7 +79,7 @@ export default function Dashboard() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
           <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-            <ProjectCard project={project} handleHidden={refetch}/>
+            <ProjectCard project={project} handleHidden={refetch} />
           </div>
         ))}
       </div>
