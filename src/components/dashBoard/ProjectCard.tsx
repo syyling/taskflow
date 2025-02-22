@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card.tsx';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 import { Progress } from '../ui/progress.tsx';
 import OverlappingAvatars from '@/components/dashBoard/OverlappingAvatars.tsx';
 import { Calendar, MoreHorizontal } from 'lucide-react';
@@ -35,16 +28,17 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
   const nav = useNavigate();
 
   const [progress, setProgress] = useState(0);
-  const checked = useDashBoardStore((state) => state.checked);
+  const checked = useDashBoardStore(state => state.checked);
 
-  // Todo: project.startDate 추가 후 로직 수정
   useEffect(() => {
-    const startDate: Date = project.startDate;
-    const endDate: Date = project.endDate;
+    const now = new Date();
+    const endDate = project.endDate;
+    const startDate = project.startDate;
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    const passedDays = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
-    const timeDifference: number = endDate.getTime() - startDate.getTime();
-    const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    const timer = setTimeout(() => setProgress(dayDifference), 500);
+    const progressPercent = Math.ceil(Math.min(Math.max((passedDays / totalDays) * 100, 0), 100));
+    const timer = setTimeout(() => setProgress(progressPercent), 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -67,10 +61,7 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
   };
 
   return (
-    <Card
-      className="w-full hover:shadow-md transition-all duration-200 border border-gray-200"
-      onClick={onClickCard}
-    >
+    <Card className="w-full hover:shadow-md transition-all duration-200 border border-gray-200" onClick={onClickCard}>
       <CardHeader className="flex flex-col text-left justify-start gap-2 pb-3">
         <div className="flex justify-between items-start w-full">
           <div className="flex flex-col gap-1">
@@ -84,18 +75,14 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 hover:bg-gray-100"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={e => e.stopPropagation()}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
               <DropdownMenuItem className="cursor-pointer">수정</DropdownMenuItem>
               <DropdownMenuItem
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   handleHide();
                 }}
@@ -109,9 +96,7 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
       </CardHeader>
 
       <CardContent className="flex flex-col content-start text-left gap-2 pb-3">
-        <CardDescription className="text-sm text-gray-600 line-clamp-2">
-          {project.description}
-        </CardDescription>
+        <CardDescription className="text-sm text-gray-600 line-clamp-2">{project.description}</CardDescription>
       </CardContent>
 
       <CardContent className="flex flex-row content-start text-left gap-1 pb-3">
