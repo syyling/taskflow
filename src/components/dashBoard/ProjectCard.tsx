@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button.tsx';
 import { updateProjectVisibility } from '@/fecthers/project/project.tsx';
 import { useQueryClient } from '@tanstack/react-query';
 import useDashBoardStore from '@/store/useDashBoardStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ProjectCardProps {
   project: Project;
@@ -28,22 +28,24 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
   const nav = useNavigate();
 
   const [progress, setProgress] = useState(0);
-  const checked = useDashBoardStore((state) => state.checked);
+  const checked = useDashBoardStore(state => state.checked);
 
-  // Todo: project.startDate 추가 후 로직 수정
   useEffect(() => {
-    const currentDate: Date = new Date();
+    const now = new Date();
+    const endDate = project.endDate;
+    const startDate = project.startDate;
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    const passedDays = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
-    const timeDifference: number = new Date(project.deadline).getTime() - currentDate.getTime();
-    const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    const timer = setTimeout(() => setProgress(dayDifference), 500);
+    const progressPercent = Math.ceil(Math.min(Math.max((passedDays / totalDays) * 100, 0), 100));
+    const timer = setTimeout(() => setProgress(progressPercent), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  function calculateDDay(targetDate: Date): number {
+  function calculateDDay(endDate: Date): number {
     const currentDate: Date = new Date();
 
-    const timeDifference: number = targetDate.getTime() - currentDate.getTime();
+    const timeDifference: number = endDate.getTime() - currentDate.getTime();
     const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
     return dayDifference;
   }
@@ -67,20 +69,20 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
             <CardDescription className="flex items-center gap-1">
               <span>{project.progress}</span>
               <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full">
-                마감일 D-{calculateDDay(new Date(project.deadline))}
+                마감일 D-{calculateDDay(project.endDate)}
               </span>
             </CardDescription>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={(e) => e.stopPropagation()}>
+              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={e => e.stopPropagation()}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
               <DropdownMenuItem className="cursor-pointer">수정</DropdownMenuItem>
               <DropdownMenuItem
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   handleHide();
                 }}
@@ -106,7 +108,7 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
           <div className="flex items-center space-x-2 text-gray-500">
             <Calendar className="w-4 h-4" />
             <CardDescription>
-              {project.deadline ? format(new Date(project.deadline), 'yyyy-MM-dd') : '날짜 미정'}
+              {project.endDate ? format(new Date(project.endDate), 'yyyy-MM-dd') : '날짜 미정'}
             </CardDescription>
           </div>
           <span className="text-sm font-medium text-gray-600">{progress}%</span>
