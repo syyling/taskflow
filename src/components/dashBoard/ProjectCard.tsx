@@ -1,4 +1,11 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card.tsx';
 import { Progress } from '../ui/progress.tsx';
 import OverlappingAvatars from '@/components/dashBoard/OverlappingAvatars.tsx';
 import { Calendar, MoreHorizontal } from 'lucide-react';
@@ -17,7 +24,7 @@ import { Button } from '@/components/ui/button.tsx';
 import { updateProjectVisibility } from '@/fecthers/project/project.tsx';
 import { useQueryClient } from '@tanstack/react-query';
 import useDashBoardStore from '@/store/useDashBoardStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ProjectCardProps {
   project: Project;
@@ -32,18 +39,19 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
 
   // Todo: project.startDate 추가 후 로직 수정
   useEffect(() => {
-    const currentDate: Date = new Date();
+    const startDate: Date = project.startDate;
+    const endDate: Date = project.endDate;
 
-    const timeDifference: number = new Date(project.deadline).getTime() - currentDate.getTime();
+    const timeDifference: number = endDate.getTime() - startDate.getTime();
     const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
     const timer = setTimeout(() => setProgress(dayDifference), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  function calculateDDay(targetDate: Date): number {
+  function calculateDDay(endDate: Date): number {
     const currentDate: Date = new Date();
 
-    const timeDifference: number = targetDate.getTime() - currentDate.getTime();
+    const timeDifference: number = endDate.getTime() - currentDate.getTime();
     const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
     return dayDifference;
   }
@@ -59,7 +67,10 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
   };
 
   return (
-    <Card className="w-full hover:shadow-md transition-all duration-200 border border-gray-200" onClick={onClickCard}>
+    <Card
+      className="w-full hover:shadow-md transition-all duration-200 border border-gray-200"
+      onClick={onClickCard}
+    >
       <CardHeader className="flex flex-col text-left justify-start gap-2 pb-3">
         <div className="flex justify-between items-start w-full">
           <div className="flex flex-col gap-1">
@@ -67,13 +78,17 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
             <CardDescription className="flex items-center gap-1">
               <span>{project.progress}</span>
               <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full">
-                마감일 D-{calculateDDay(new Date(project.deadline))}
+                마감일 D-{calculateDDay(project.endDate)}
               </span>
             </CardDescription>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={(e) => e.stopPropagation()}>
+              <Button
+                variant="ghost"
+                className="h-8 w-8 p-0 hover:bg-gray-100"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -94,7 +109,9 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
       </CardHeader>
 
       <CardContent className="flex flex-col content-start text-left gap-2 pb-3">
-        <CardDescription className="text-sm text-gray-600 line-clamp-2">{project.description}</CardDescription>
+        <CardDescription className="text-sm text-gray-600 line-clamp-2">
+          {project.description}
+        </CardDescription>
       </CardContent>
 
       <CardContent className="flex flex-row content-start text-left gap-1 pb-3">
@@ -106,7 +123,7 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
           <div className="flex items-center space-x-2 text-gray-500">
             <Calendar className="w-4 h-4" />
             <CardDescription>
-              {project.deadline ? format(new Date(project.deadline), 'yyyy-MM-dd') : '날짜 미정'}
+              {project.endDate ? format(new Date(project.endDate), 'yyyy-MM-dd') : '날짜 미정'}
             </CardDescription>
           </div>
           <span className="text-sm font-medium text-gray-600">{progress}%</span>
