@@ -73,24 +73,17 @@ export default function DetailPage() {
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Calendar className="w-4 h-4" />
                   <span className="text-sm">
-                    {project?.startDate?.toISOString().split('T')[0]} -{' '}
-                    {project?.endDate?.toISOString().split('T')[0]}
+                    {project?.startDate?.toISOString().split('T')[0]} - {project?.endDate?.toISOString().split('T')[0]}
                   </span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4"
-                >
+                <Badge variant="outline" className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4">
                   <Link className="w-4 h-4 mr-2" />
                   Github
                   <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Badge>
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4"
-                >
+                <Badge variant="outline" className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4">
                   <FileText className="w-4 h-4 mr-2" />
                   문서
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -116,9 +109,7 @@ export default function DetailPage() {
                 <CardContent className="pt-6 space-y-8">
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold">프로젝트 설명</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {project?.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project?.description}</p>
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold">주요 기능</h3>
@@ -136,7 +127,7 @@ export default function DetailPage() {
 
               {/* Right Column */}
               <div className="space-y-6">
-                {/*<MemberCard project={project?.users} />*/}
+                <MemberCard users={project?.users} />
                 {/*<TechStackCard project={project} />*/}
               </div>
             </div>
