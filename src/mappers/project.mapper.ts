@@ -16,7 +16,8 @@ export const mapProjectDTOToProject = (projectDTO: ProjectDTO): Project => {
     id: projectDTO.id,
     name: projectDTO.name,
     description: projectDTO.description,
-    deadline: projectDTO.deadline,
+    startDate: new Date(projectDTO.startDate),
+    endDate: new Date(projectDTO.endDate),
     progress: projectDTO.progress,
     isVisible: projectDTO.isVisible,
     users: projectDTO.users.map((userWrapper) => ({
@@ -26,7 +27,9 @@ export const mapProjectDTOToProject = (projectDTO: ProjectDTO): Project => {
 };
 
 // 여러 Project DTO를 Project 모델 배열로 변환하는 헬퍼 함수
-export const mapProjectDTOsToProjects = (projectDTOs: ProjectDTO[] | null | undefined): Project[] => {
+export const mapProjectDTOsToProjects = (
+  projectDTOs: ProjectDTO[] | null | undefined
+): Project[] => {
   if (!projectDTOs) {
     return [];
   }
