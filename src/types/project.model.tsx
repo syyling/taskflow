@@ -2,6 +2,8 @@ export interface User {
   id: string;
   img: string;
   name: string;
+  role: string;
+  authLevel: string;
 }
 
 export interface Project {
@@ -12,5 +14,5 @@ export interface Project {
   endDate: Date;
   progress: string;
   isVisible: boolean;
-  users: { user: User }[];
+  users: User[];
 }

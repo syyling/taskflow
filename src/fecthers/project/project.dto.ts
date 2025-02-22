@@ -12,7 +12,7 @@ export interface ProjectDTO {
   endDate: string;
   progress: string;
   isVisible: boolean;
-  users: { user: UserDTO }[];
+  users: { role: string; authLevel: string; user: UserDTO }[];
 }
 
 export interface FeatureDTO {

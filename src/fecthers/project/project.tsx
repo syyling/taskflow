@@ -26,8 +26,9 @@ export const fetchProjects = async (onlyVisible, userId): Promise<ProjectDTO[] |
       progress, 
       isVisible,
       users:project_in_user(
-        user(id, name, img)
-      )
+          role, authLevel,
+          user(id, name, img)
+    )
     `
     )
     .in('id', projectIdList);
@@ -46,7 +47,10 @@ export const fetchProject = async ({ projectId }: { projectId: number }): Promis
   const query = supabase
     .from('project')
     .select(
-      `id, name, description, startDate, endDate, progress, isVisible, users:project_in_user(user(id, name, img))`
+      `id, name, description, startDate, endDate, progress, isVisible, 
+      users:project_in_user(
+          role, authLevel,
+          user(id, name, img))`
     )
     .eq('id', projectId);
 
