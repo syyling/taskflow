@@ -6,9 +6,12 @@ const ProgressCard = ({ startDate, endDate }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timeDifference: number = endDate.getTime() - startDate.getTime();
-    const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    setProgress(dayDifference);
+    const now = new Date();
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+    const passedDays = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+
+    const progressPercent = Math.ceil(Math.min(Math.max((passedDays / totalDays) * 100, 0), 100));
+    setProgress(progressPercent);
   }, [startDate, endDate]);
 
   const getProgressClass = (value) => {
