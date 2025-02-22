@@ -1,50 +1,54 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Users,
-  FileText,
-  GitBranch,
-  Link,
-  Calendar,
-  ArrowUpRight,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import ProjectCard from "@/components/detail/ProgressCard.tsx";
-import ProgressCard from "@/components/detail/ProgressCard.tsx";
-import { motion } from "framer-motion";
-import MemberCard from "@/components/detail/MemberCard.tsx";
-import TechStackCard from "@/components/detail/TechStackCard.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Users, FileText, GitBranch, Link, Calendar, ArrowUpRight } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import ProjectCard from '@/components/detail/ProgressCard.tsx';
+import ProgressCard from '@/components/detail/ProgressCard.tsx';
+import { motion } from 'framer-motion';
+import MemberCard from '@/components/detail/MemberCard.tsx';
+import TechStackCard from '@/components/detail/TechStackCard.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProject, fetchProjects } from '@/fecthers/project/project.tsx';
+import { useEffect, useState } from 'react';
+import { ProjectDTO } from '@/fecthers/project/project.dto.ts';
+import { Project } from '@/types/project.model.tsx';
+import { mapProjectDTOToProject } from '@/mappers/project.mapper.ts';
 
 export default function DetailPage() {
-  const project = {
-    title: "프로젝트명",
-    status: "진행중",
-    description: "프로젝트 설명이 들어갑니다.",
-    progress: 65,
-    startDate: "2024.02",
-    endDate: "2024.06",
-    team: [
-      { name: "김서영", role: "FRONTEND", authLevel: "ADMIN" },
-      { name: "박솔", role: "BACKEND", authLevel: "VIEWER" },
-    ],
-    features: ["기능 1", "기능 2", "기능 3"],
-    stack: {
-      frontend: ["React", "TypeScript", "Tailwind"],
-      backend: ["Node.js", "Express", "PostgreSQL"],
-    },
-    milestones: [
-      { title: "기획", date: "2024-02", done: true },
-      { title: "MVP 개발", date: "2024-04", done: false },
-      { title: "베타 출시", date: "2024-06", done: false },
-    ],
-  };
-
+  const [project, setProject] = useState<Project>();
   const nav = useNavigate();
   const onClickButton = () => {
-    nav("/kanban");
+    nav('/kanban');
   };
+
+  const { projectId } = useParams();
+
+  const {
+    data: projectData,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['projects', projectId],
+    queryFn: () => fetchProject({ projectId: Number(projectId) }),
+    enabled: !!projectId,
+  });
+
+  useEffect(() => {
+    if (projectData) {
+      setProject(mapProjectDTOToProject(projectData[0]));
+    }
+  }, [projectData]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <motion.div
@@ -61,31 +65,25 @@ export default function DetailPage() {
             <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:items-center">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-bold">{project.title}</h1>
+                  <h1 className="text-3xl font-bold">{project?.name}</h1>
                   <Badge variant="secondary" className="capitalize">
-                    {project.status}
+                    {project?.progress}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Calendar className="w-4 h-4" />
                   <span className="text-sm">
-                    {project.startDate} - {project.endDate}
+                    {project?.startDate?.toISOString().split('T')[0]} - {project?.endDate?.toISOString().split('T')[0]}
                   </span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4"
-                >
+                <Badge variant="outline" className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4">
                   <Link className="w-4 h-4 mr-2" />
                   Github
                   <ArrowUpRight className="w-3 h-3 ml-1" />
                 </Badge>
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4"
-                >
+                <Badge variant="outline" className="cursor-pointer hover:bg-secondary transition-colors py-2 px-4">
                   <FileText className="w-4 h-4 mr-2" />
                   문서
                   <ArrowUpRight className="w-3 h-3 ml-1" />
@@ -102,7 +100,7 @@ export default function DetailPage() {
               </div>
             </div>
             {/* Progress Card - Full Width */}
-            <ProgressCard project={project} />
+            {project && <ProgressCard startDate={project.startDate} endDate={project.endDate} />}
 
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -111,60 +109,56 @@ export default function DetailPage() {
                 <CardContent className="pt-6 space-y-8">
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold">프로젝트 설명</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {project.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{project?.description}</p>
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold">주요 기능</h3>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      {project.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                          <span className="text-primary mt-1">•</span>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {/*<ul className="text-sm text-muted-foreground space-y-2">*/}
+                    {/*  {project?.features?.map((feature, index) => (*/}
+                    {/*    <li key={index} className="flex items-start gap-2">*/}
+                    {/*      <span className="text-primary mt-1">•</span>*/}
+                    {/*      <span>{feature}</span>*/}
+                    {/*    </li>*/}
+                    {/*  ))}*/}
+                    {/*</ul>*/}
                   </div>
                 </CardContent>
               </Card>
 
               {/* Right Column */}
               <div className="space-y-6">
-                <MemberCard project={project} />
-                <TechStackCard project={project} />
+                <MemberCard users={project?.users} />
+                {/*<TechStackCard project={project} />*/}
               </div>
             </div>
 
             {/* Timeline */}
             <Card>
               <CardContent className="pt-6">
-                <h3 className="text-xl font-semibold mb-6">
-                  프로젝트 타임라인
-                </h3>
+                <h3 className="text-xl font-semibold mb-6">프로젝트 타임라인</h3>
                 <div className="space-y-1">
-                  {project.milestones.map((milestone, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-4 py-4 first:pt-0 last:pb-0 border-l-2 border-muted pl-4 relative"
-                    >
-                      <div className="absolute -left-[5px] top-5 w-2 h-2 rounded-full bg-primary" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-4">
-                          <p className="font-medium">{milestone.title}</p>
-                          <Badge
-                            variant={milestone.done ? "default" : "secondary"}
-                            className="flex-shrink-0"
-                          >
-                            {milestone.done ? "완료" : "예정"}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {milestone.date}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                  {/*{project?.milestones.map((milestone, index) => (*/}
+                  {/*  <div*/}
+                  {/*    key={index}*/}
+                  {/*    className="flex items-center gap-4 py-4 first:pt-0 last:pb-0 border-l-2 border-muted pl-4 relative"*/}
+                  {/*  >*/}
+                  {/*    <div className="absolute -left-[5px] top-5 w-2 h-2 rounded-full bg-primary" />*/}
+                  {/*    <div className="flex-1">*/}
+                  {/*      <div className="flex items-center justify-between gap-4">*/}
+                  {/*        <p className="font-medium">{milestone.title}</p>*/}
+                  {/*        <Badge*/}
+                  {/*          variant={milestone?.done ? "default" : "secondary"}*/}
+                  {/*          className="flex-shrink-0"*/}
+                  {/*        >*/}
+                  {/*          {milestone.done ? "완료" : "예정"}*/}
+                  {/*        </Badge>*/}
+                  {/*      </div>*/}
+                  {/*      <p className="text-sm text-muted-foreground mt-1">*/}
+                  {/*        {milestone.date}*/}
+                  {/*      </p>*/}
+                  {/*    </div>*/}
+                  {/*  </div>*/}
+                  {/*))}*/}
                 </div>
               </CardContent>
             </Card>

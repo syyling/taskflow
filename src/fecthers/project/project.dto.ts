@@ -1,5 +1,5 @@
 export interface UserDTO {
-  id: number;
+  id: string;
   img: string;
   name: string;
 }
@@ -8,8 +8,14 @@ export interface ProjectDTO {
   id: number;
   name: string;
   description: string;
-  deadline: Date;
+  startDate: string;
+  endDate: string;
   progress: string;
   isVisible: boolean;
-  users: { user: UserDTO }[];
+  users: { role: string; authLevel: string; user: UserDTO }[];
+}
+
+export interface FeatureDTO {
+  id: number;
+  feature: string;
 }
