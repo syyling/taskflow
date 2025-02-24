@@ -6,8 +6,8 @@ export default function OverlappingAvatars({ users }) {
   return (
     <div className="flex items-center">
       <div className="flex -space-x-3">
+        <TooltipProvider>
         {users.map((user, index) => (
-          <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Avatar key={index} className="w-7 h-7 border-2 border-white shadow-md">
@@ -21,10 +21,9 @@ export default function OverlappingAvatars({ users }) {
                 <p>{user.name}</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
         ))}
+        </TooltipProvider>
       </div>
-      {/*<span className="text-gray-500 text-sm ml-3">+2명</span>*/}
     </div>
   );
 }
