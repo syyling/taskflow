@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button.tsx';
 import {
   Dialog,
   DialogContent,
@@ -7,23 +7,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Calendar as CalendarIcon,
-  Check,
-  ChevronsUpDown,
-  PlusCircle,
-} from "lucide-react";
+} from '@/components/ui/dialog.tsx';
+import { Input } from '@/components/ui/input.tsx';
+import { Label } from '@/components/ui/label.tsx';
+import { Calendar as CalendarIcon, Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { cn } from '@/lib/utils.ts';
+import { Calendar } from '@/components/ui/calendar.tsx';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import {
   Command,
   CommandDialog,
@@ -34,10 +25,10 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@/components/ui/command";
-import { ChangeEvent, useEffect, useState } from "react";
-import { format } from "date-fns";
-import { supabase } from "@/supabase.ts";
+} from '@/components/ui/command.tsx';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import { supabase } from '@/supabase.ts';
 import {
   Select,
   SelectContent,
@@ -46,9 +37,9 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useQueryClient } from "@tanstack/react-query";
-import useDashBoardStore from "@/store/useDashBoardStore.tsx";
+} from '@/components/ui/select.tsx';
+import { useQueryClient } from '@tanstack/react-query';
+import useDashBoardStore from '@/store/useDashBoardStore.tsx';
 
 interface UserOption {
   value: number;
@@ -65,20 +56,20 @@ interface ProjectForm {
 
 const progressOptions = [
   {
-    id: "1",
-    label: "진행중",
+    id: '1',
+    label: '진행중',
   },
   {
-    id: "2",
-    label: "완료",
+    id: '2',
+    label: '완료',
   },
   {
-    id: "3",
-    label: "중단",
+    id: '3',
+    label: '중단',
   },
   {
-    id: "4",
-    label: "시작 전",
+    id: '4',
+    label: '시작 전',
   },
 ] as const;
 
@@ -88,11 +79,11 @@ export function ProjectDialog() {
   const [open, setOpen] = useState<boolean>(false);
   const [users, setUsers] = useState<UserOption[]>([]);
   const [projectData, setProjectData] = useState<ProjectForm>({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     deadline: null,
     selectedUsers: [],
-    progress: "",
+    progress: '',
   });
 
   const checked = useDashBoardStore((state) => state.checked);
@@ -102,9 +93,7 @@ export function ProjectDialog() {
   }, []);
 
   const queryData = async () => {
-    const { data: users, error } = await supabase
-      .from("user")
-      .select("id, name");
+    const { data: users, error } = await supabase.from('user').select('id, name');
 
     if (users) {
       const formattedUsers = users.map((user) => ({
@@ -117,7 +106,7 @@ export function ProjectDialog() {
 
   const handleSave = async () => {
     const { data, error } = await supabase
-      .from("project")
+      .from('project')
       .insert([
         {
           name: projectData.name,
@@ -132,13 +121,13 @@ export function ProjectDialog() {
       const projectId = data[0].id;
       projectData.selectedUsers.map(async (selectedUser) => {
         const { data: projectinusers, error } = await supabase
-          .from("project_in_user")
+          .from('project_in_user')
           .insert([{ project_id: projectId, user_id: selectedUser }])
           .select();
       });
     }
 
-    queryClient.invalidateQueries({ queryKey: ["projects", checked] });
+    queryClient.invalidateQueries({ queryKey: ['projects', checked] });
   };
 
   const handleUserSelect = (userValue: number) => {
@@ -174,9 +163,7 @@ export function ProjectDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">
-            프로젝트 추가
-          </DialogTitle>
+          <DialogTitle className="text-xl font-semibold">프로젝트 추가</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
@@ -187,7 +174,7 @@ export function ProjectDialog() {
               placeholder="프로젝트 제목을 입력하세요"
               className="w-full"
               value={projectData.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
+              onChange={(e) => handleInputChange('name', e.target.value)}
             />
           </div>
 
@@ -198,7 +185,7 @@ export function ProjectDialog() {
               placeholder="프로젝트 설명을 입력하세요"
               className="w-full"
               value={projectData.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
+              onChange={(e) => handleInputChange('description', e.target.value)}
             />
           </div>
 
@@ -209,25 +196,16 @@ export function ProjectDialog() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !projectData.deadline && "text-muted-foreground",
+                    'w-full justify-start text-left font-normal',
+                    !projectData.deadline && 'text-muted-foreground'
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {projectData.deadline ? (
-                    format(projectData.deadline, "yyyy-MM-dd")
-                  ) : (
-                    <span>날짜를 선택하세요</span>
-                  )}
+                  {projectData.deadline ? format(projectData.deadline, 'yyyy-MM-dd') : <span>날짜를 선택하세요</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={projectData.deadline}
-                  onSelect={handleDateChange}
-                  initialFocus
-                />
+                <Calendar mode="single" selected={projectData.deadline} onSelect={handleDateChange} initialFocus />
               </PopoverContent>
             </Popover>
           </div>
@@ -236,20 +214,12 @@ export function ProjectDialog() {
             <Label htmlFor="user">참여자</Label>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-full justify-between"
-                >
+                <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
                   {projectData.selectedUsers.length > 0
                     ? projectData.selectedUsers
-                        .map(
-                          (value) =>
-                            users.find((user) => user.value === value)?.label,
-                        )
-                        .join(", ")
-                    : "참여자를 선택하세요"}
+                        .map((value) => users.find((user) => user.value === value)?.label)
+                        .join(', ')
+                    : '참여자를 선택하세요'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -272,10 +242,8 @@ export function ProjectDialog() {
                           {user.label}
                           <Check
                             className={cn(
-                              "h-4 w-4",
-                              projectData.selectedUsers.includes(user.value)
-                                ? "opacity-100"
-                                : "opacity-0",
+                              'h-4 w-4',
+                              projectData.selectedUsers.includes(user.value) ? 'opacity-100' : 'opacity-0'
                             )}
                           />
                         </CommandItem>
@@ -289,9 +257,7 @@ export function ProjectDialog() {
 
           <div className="flex flex-col space-y-2">
             <Label htmlFor="progress">진행 상황</Label>
-            <Select
-              onValueChange={(value) => handleInputChange("progress", value)}
-            >
+            <Select onValueChange={(value) => handleInputChange('progress', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="진행 상황을 선택하세요" />
               </SelectTrigger>

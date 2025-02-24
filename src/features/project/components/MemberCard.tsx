@@ -1,13 +1,13 @@
 import { Card, CardContent } from '@/components/ui/card.tsx';
 import { BadgeHelp, Briefcase, IdCard, Shield, UserCircle, Users, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@radix-ui/react-label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx';
 import { AuthLevel, Role } from '@/types/enums.tsx';
 import { useEffect, useState } from 'react';
-import SaveAlertDialog from '@/components/SaveAlertDialog.tsx';
+import SaveAlertDialog from '@/components/dialog/SaveAlertDialog.tsx';
 
 const MemberCard = ({ users }) => {
   const [projectTeam, setProjectTeam] = useState([]);

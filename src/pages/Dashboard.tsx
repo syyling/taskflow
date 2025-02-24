@@ -1,10 +1,10 @@
-import ProjectCard from '@/components/dashBoard/ProjectCard.tsx';
+import ProjectCard from '@/features/project/components/ProjectCard.tsx';
 import SearchBar from '@/components/dashBoard/SearchBar.tsx';
 import { useEffect, useState } from 'react';
-import { ProjectDialog } from '@/components/dashBoard/ProjectDialog.tsx';
+import { ProjectDialog } from '@/features/project/components/ProjectDialog.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { Switch } from '@/components/ui/switch.tsx';
-import { fetchProjects } from '@/fecthers/project/project.tsx';
+import { fetchProjects } from '@/features/project/fetchers/project.tsx';
 import useDashBoardStore from '../store/useDashBoardStore.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext.tsx';
@@ -14,8 +14,8 @@ import { Eye, Plus } from 'lucide-react';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
-  const checked = useDashBoardStore(state => state.checked);
-  const setChecked = useDashBoardStore(state => state.setChecked);
+  const checked = useDashBoardStore((state) => state.checked);
+  const setChecked = useDashBoardStore((state) => state.setChecked);
   const { user } = useAuth();
 
   const {
