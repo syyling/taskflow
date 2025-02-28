@@ -9,6 +9,8 @@ import { useAuth } from '@/contexts/AuthContext.tsx';
 import { Project } from '@/features/project/types/project.model.tsx';
 import { mapProjectDTOsToProjects } from '@/features/project/project.mapper.ts';
 import {ProjectDialog} from "@/features/project/components/ProjectDialog.tsx";
+import DetailPageSkeleton from "@/pages/DetailPageSkeleton.tsx";
+import ErrorPage from "@/pages/ErrorPage.tsx";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
@@ -30,6 +32,15 @@ export default function Dashboard() {
   useEffect(() => {
     setProjects(mapProjectDTOsToProjects(projectsData));
   }, [projectsData]);
+
+  if (isLoading) {
+    return <DetailPageSkeleton />;
+  }
+
+  if (error) {
+    return <ErrorPage />;
+  }
+
 
   return (
     <div className="w-full min-h-screen bg-background ">
