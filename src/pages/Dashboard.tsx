@@ -1,21 +1,19 @@
-import ProjectCard from '@/components/dashBoard/ProjectCard.tsx';
+import ProjectCard from '@/features/project/components/ProjectCard.tsx';
 import SearchBar from '@/components/dashBoard/SearchBar.tsx';
 import { useEffect, useState } from 'react';
-import { ProjectDialog } from '@/components/dashBoard/ProjectDialog.tsx';
-import { Label } from '@/components/ui/label.tsx';
 import { Switch } from '@/components/ui/switch.tsx';
-import { fetchProjects } from '@/fecthers/project/project.tsx';
+import { fetchProjects } from '@/features/project/fetchers/project.tsx';
 import useDashBoardStore from '../store/useDashBoardStore.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext.tsx';
-import { Project } from '@/types/project.model.tsx';
-import { mapProjectDTOsToProjects } from '@/mappers/project.mapper.ts';
-import { Eye, Plus } from 'lucide-react';
+import { Project } from '@/features/project/types/project.model.tsx';
+import { mapProjectDTOsToProjects } from '@/features/project/project.mapper.ts';
+import {ProjectDialog} from "@/features/project/components/ProjectDialog.tsx";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
-  const checked = useDashBoardStore(state => state.checked);
-  const setChecked = useDashBoardStore(state => state.setChecked);
+  const checked = useDashBoardStore((state) => state.checked);
+  const setChecked = useDashBoardStore((state) => state.setChecked);
   const { user } = useAuth();
 
   const {
@@ -24,8 +22,8 @@ export default function Dashboard() {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ['projects', checked, user.id],
-    queryFn: () => fetchProjects(!checked, user.id),
+    queryKey: ['projects', checked, user?.id],
+    queryFn: () => fetchProjects(!checked, user?.id),
     enabled: !!user,
   });
 
@@ -66,20 +64,17 @@ export default function Dashboard() {
               </div>
 
               {/* 새 프로젝트 버튼 */}
-              <button className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
-                <Plus className="w-4 h-4" />
-                <span className="text-sm font-medium">새 프로젝트</span>
-              </button>
+              <ProjectDialog />
             </div>
           )}
         </div>
       </div>
 
       {/* Projects Grid with Masonry-like Layout */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
+      <div className="grid gap-6 px-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
           <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
-            <ProjectCard project={project} handleHidden={refetch} />
+            <ProjectCard project={project} />
           </div>
         ))}
       </div>

@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import { Progress } from '../ui/progress.tsx';
-import OverlappingAvatars from '@/components/dashBoard/OverlappingAvatars.tsx';
+import { Progress } from '@/components/ui/progress.tsx';
+import OverlappingAvatars from '@/features/user/components/OverlappingAvatars.tsx';
 import { Calendar, MoreHorizontal } from 'lucide-react';
-import { Project } from '@/types/project.model.tsx';
+import { Project } from '@/features/project/types/project.model.tsx';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
@@ -12,23 +12,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
-import { updateProjectVisibility } from '@/fecthers/project/project.tsx';
+import { updateProjectVisibility } from '@/features/project/fetchers/project.tsx';
 import { useQueryClient } from '@tanstack/react-query';
-import useDashBoardStore from '@/store/useDashBoardStore';
+import useDashBoardStore from '@/store/useDashBoardStore.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface ProjectCardProps {
   project: Project;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps, { handleHidden }) {
+export default function ProjectCard({ project }: ProjectCardProps) {
   const queryClient = useQueryClient();
   const nav = useNavigate();
 
   const [progress, setProgress] = useState(0);
-  const checked = useDashBoardStore(state => state.checked);
+  const checked = useDashBoardStore((state) => state.checked);
 
   useEffect(() => {
     const now = new Date();
@@ -75,14 +75,14 @@ export default function ProjectCard({ project }: ProjectCardProps, { handleHidde
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={e => e.stopPropagation()}>
+              <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={(e) => e.stopPropagation()}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32">
               <DropdownMenuItem className="cursor-pointer">수정</DropdownMenuItem>
               <DropdownMenuItem
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   handleHide();
                 }}

@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card.tsx";
-import { Plus, Users, X } from "lucide-react";
+import { Card, CardContent } from '@/components/ui/card.tsx';
+import { Plus, Users, X } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -7,10 +7,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge.tsx";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/sheet.tsx';
+import { Badge } from '@/components/ui/badge.tsx';
+import { Button } from '@/components/ui/button.tsx';
+import { Input } from '@/components/ui/input.tsx';
 
 const TechStackCard = ({ project }) => {
   return (
@@ -21,32 +21,20 @@ const TechStackCard = ({ project }) => {
             <h3 className="text-xl font-semibold mb-6">기술 스택</h3>
             <div className="space-y-6">
               <div>
-                <h4 className="font-medium text-muted-foreground mb-3">
-                  프론트엔드
-                </h4>
+                <h4 className="font-medium text-muted-foreground mb-3">프론트엔드</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.stack.frontend.map((tech, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="py-1 px-3"
-                    >
+                    <Badge key={index} variant="secondary" className="py-1 px-3">
                       {tech}
                     </Badge>
                   ))}
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-muted-foreground mb-3">
-                  백엔드
-                </h4>
+                <h4 className="font-medium text-muted-foreground mb-3">백엔드</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.stack.backend.map((tech, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="py-1 px-3"
-                    >
+                    <Badge key={index} variant="secondary" className="py-1 px-3">
                       {tech}
                     </Badge>
                   ))}

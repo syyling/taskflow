@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent } from '@/components/ui/card.tsx';
+import { Progress } from '@/components/ui/progress.tsx';
 import { useEffect, useState } from 'react';
 
 const ProgressCard = ({ startDate, endDate }) => {
@@ -16,11 +16,7 @@ const ProgressCard = ({ startDate, endDate }) => {
 
   const getProgressClass = (value) => {
     return `h-3 rounded-lg ${
-      value < 30
-        ? '[&>div]:bg-red-500'
-        : value < 70
-          ? '[&>div]:bg-yellow-500'
-          : '[&>div]:bg-green-500'
+      value < 30 ? '[&>div]:bg-red-500' : value < 70 ? '[&>div]:bg-yellow-500' : '[&>div]:bg-green-500'
     }`;
   };
 
