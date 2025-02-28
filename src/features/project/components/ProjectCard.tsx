@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import { Progress } from '../../../components/ui/progress.tsx';
+import { Progress } from '@/components/ui/progress.tsx';
 import OverlappingAvatars from '@/features/user/components/OverlappingAvatars.tsx';
 import { Calendar, MoreHorizontal } from 'lucide-react';
-import { Project } from '@/types/project.model.tsx';
+import { Project } from '@/features/project/types/project.model.tsx';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
@@ -23,7 +23,7 @@ interface ProjectCardProps {
   project: Project;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps, { handleHidden }) {
+export default function ProjectCard({ project }: ProjectCardProps) {
   const queryClient = useQueryClient();
   const nav = useNavigate();
 
