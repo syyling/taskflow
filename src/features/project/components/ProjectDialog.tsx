@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
-import { Calendar as CalendarIcon, Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
+import {Calendar as CalendarIcon, Check, ChevronsUpDown, Plus, PlusCircle} from 'lucide-react';
 
 import { cn } from '@/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
@@ -154,14 +154,15 @@ export function ProjectDialog() {
   };
 
   return (
-    <Dialog>
+    <Dialog modal={false}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <PlusCircle className="h-4 w-4" />
-          새프로젝트 추가
+        <Button
+          className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
+          <Plus className="w-4 h-4"/>
+          <span className="text-sm font-medium">새 프로젝트</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px]" style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)" }}>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">프로젝트 추가</DialogTitle>
         </DialogHeader>
