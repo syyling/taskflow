@@ -1,6 +1,5 @@
-import { supabase } from '@/supabase.ts';
-import { FeatureDTO, ProjectDTO } from '@/fecthers/project/project.dto.ts';
-import { useAuth } from '@/contexts/AuthContext.tsx';
+import {supabase} from '@/supabase.ts';
+import {FeatureDTO, ProjectDTO} from '@/features/project/types/project.dto.ts';
 
 export const fetchProjects = async (onlyVisible, userId): Promise<ProjectDTO[] | null> => {
   const { data: projectIds, error: idError } = await supabase
@@ -72,3 +71,63 @@ export const fetchFeatures = async (projectId): Promise<FeatureDTO | null> => {
   if (error) throw error;
   return features;
 };
+
+export const getProjectMembers = async (projectId) => {
+  type ProjectMember = {
+    authLevel: string;
+    role: string;
+    user_id: string;
+    project_id: string;
+    user?: { name: string }; // user가 존재하지 않을 수도 있으므로 옵셔널 처리
+  };
+
+  const { data, error } = await supabase
+    .from('project_in_user')
+    .select(`
+            authLevel,
+            role,
+            user_id,
+            project_id,
+            user (name)
+          `)
+    .eq("project_id", projectId)
+    .returns<ProjectMember[]>(); // 반환 타입을 명시적으로 설정
+
+  if (error) throw error;
+
+  return data.map(member => ({
+    ...member,
+    name: member.user?.name
+  }));
+}
+
+export const upsertProjectInUsers = async (projectTeam, deleteMembers, projectId) => {
+  const records = projectTeam.map(team => ({
+    project_id: projectId,
+    authLevel: team.authLevel || '',
+    role: team.role || '',
+    user_id: team.id || ''
+  }));
+
+  const [deleteResult, upsertResult] = await Promise.all([
+    deleteMembers.length > 0
+      ? supabase
+        .from('project_in_user')
+        .delete()
+        .eq('project_id', projectId)
+        .in('user_id', deleteMembers)
+      : Promise.resolve({ error: null }),
+
+    records.length > 0
+      ? supabase
+        .from('project_in_user')
+        .upsert(records)
+        .select()
+      : Promise.resolve({ data: [], error: null })
+  ]);
+
+  if (deleteResult.error) throw deleteResult.error;
+  if (upsertResult.error) throw upsertResult.error;
+
+  return upsertResult.data;
+}

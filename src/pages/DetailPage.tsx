@@ -1,20 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, FileText, GitBranch, Link, Calendar, ArrowUpRight } from 'lucide-react';
+import { FileText, Link, Calendar, ArrowUpRight } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import ProjectCard from '@/features/project/components/ProgressCard.tsx';
 import ProgressCard from '@/features/project/components/ProgressCard.tsx';
 import { motion } from 'framer-motion';
 import MemberCard from '@/features/project/components/MemberCard.tsx';
-import TechStackCard from '@/features/project/components/TechStackCard.tsx';
 import { useQuery } from '@tanstack/react-query';
-import { fetchProject, fetchProjects } from '@/features/project/fetchers/project.tsx';
+import { fetchProject } from '@/features/project/fetchers/project.tsx';
 import { useEffect, useState } from 'react';
-import { ProjectDTO } from '@/fecthers/project/project.dto.ts';
-import { Project } from '@/types/project.model.tsx';
-import { mapProjectDTOToProject } from '@/mappers/project.mapper.ts';
+import { Project } from '@/features/project/types/project.model.tsx';
+import { mapProjectDTOToProject } from '@/features/project/project.mapper.ts';
 
 export default function DetailPage() {
   const [project, setProject] = useState<Project>();
@@ -127,7 +122,7 @@ export default function DetailPage() {
 
               {/* Right Column */}
               <div className="space-y-6">
-                <MemberCard users={project?.users} />
+                <MemberCard projectId={project?.id}/>
                 {/*<TechStackCard project={project} />*/}
               </div>
             </div>
