@@ -131,3 +131,14 @@ export const upsertProjectInUsers = async (projectTeam, deleteMembers, projectId
 
   return upsertResult.data;
 }
+
+export const getTechStacks = async (projectId : number)=>  {
+  const { data: techStack, error } = await supabase
+    .from('techStack')
+    .select('*')
+    .eq('projectId', projectId);
+
+  if (error) throw error;
+  return techStack;
+
+}

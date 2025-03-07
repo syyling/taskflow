@@ -10,6 +10,7 @@ import { fetchProject } from '@/features/project/fetchers/project.tsx';
 import { useEffect, useState } from 'react';
 import { Project } from '@/features/project/types/project.model.tsx';
 import { mapProjectDTOToProject } from '@/features/project/project.mapper.ts';
+import TechStackCard from "@/features/project/components/TechStackCard.tsx";
 
 export default function DetailPage() {
   const [project, setProject] = useState<Project>();
@@ -123,7 +124,7 @@ export default function DetailPage() {
               {/* Right Column */}
               <div className="space-y-6">
                 <MemberCard projectId={project?.id}/>
-                {/*<TechStackCard project={project} />*/}
+                <TechStackCard projectId={project?.id} />
               </div>
             </div>
 
