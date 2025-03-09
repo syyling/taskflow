@@ -42,13 +42,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  function calculateDDay(endDate: Date): number {
-    const currentDate: Date = new Date();
+  function calculateDDay(endDate: Date): string {
+    const currentDate = new Date();
+    const timeDifference = endDate.getTime() - currentDate.getTime();
+    const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-    const timeDifference: number = endDate.getTime() - currentDate.getTime();
-    const dayDifference: number = Math.ceil(timeDifference / (1000 * 3600 * 24));
-    return dayDifference;
+    return dayDifference >= 0 ? `-${dayDifference}` : `+${Math.abs(dayDifference)}`;
   }
+
 
   async function handleHide(): Promise<void> {
     await updateProjectVisibility(project.id, project.isVisible);
@@ -69,7 +70,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <CardDescription className="flex items-center gap-1">
               <span>{project.progress}</span>
               <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full">
-                마감일 D-{calculateDDay(project.endDate)}
+                마감일 D{calculateDDay(project.endDate)}
               </span>
             </CardDescription>
           </div>
