@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { Project } from '@/features/project/types/project.model.tsx';
 import { mapProjectDTOToProject } from '@/features/project/project.mapper.ts';
 import TechStackCard from "@/features/project/components/TechStackCard.tsx";
+import DetailPageSkeleton from "@/pages/DetailPageSkeleton.tsx";
+import ErrorPage from "@/pages/ErrorPage.tsx";
 
 export default function DetailPage() {
   const [project, setProject] = useState<Project>();
@@ -39,11 +41,11 @@ export default function DetailPage() {
   }, [projectData]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <DetailPageSkeleton />;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ErrorPage />;
   }
 
   return (
