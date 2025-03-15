@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card.tsx';
-import {Check, ChevronsUpDown, IdCard, Shield, UserCircle, Users, X} from 'lucide-react';
+import { Check, ChevronsUpDown, IdCard, Shield, UserCircle, Users, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Label } from '@radix-ui/react-label';
@@ -16,22 +16,22 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command.tsx';
-import {supabase} from "@/supabase.ts";
-import {cn} from "@/lib/utils.ts";
-import {fetchProjects, getProjectMembers, upsertProjectInUsers} from "@/features/project/fetchers/project.tsx";
-import {useToast} from "@/hooks/use-toast.ts";
-import {useQuery} from "@tanstack/react-query";
+import { supabase } from '@/supabase.ts';
+import { cn } from '@/lib/utils.ts';
+import { fetchProjects, getProjectMembers, upsertProjectInUsers } from '@/features/project/fetchers/project.tsx';
+import { useToast } from '@/hooks/use-toast.ts';
+import { useQuery } from '@tanstack/react-query';
 
-const MemberCard = ({projectId}) => {
+const MemberCard = ({ projectId }) => {
   const { toast } = useToast();
 
   const [projectTeam, setProjectTeam] = useState([]);
   const [usersAll, setUsersAll] = useState([]);
   const [deleteMembers, setDeleteMembers] = useState([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     queryData();
-  },[]);
+  }, []);
 
   const {
     data: users,
@@ -64,7 +64,7 @@ const MemberCard = ({projectId}) => {
   const getAuthLevelLabel = (authLevel: string | undefined) => AuthLevel[authLevel];
 
   const handleDeleteButton = (index: number, member) => {
-    setDeleteMembers(prev => [...prev, member.id]);
+    setDeleteMembers((prev) => [...prev, member.id]);
     const newTeam = [...projectTeam];
     newTeam.splice(index, 1);
     setProjectTeam(newTeam);
@@ -83,9 +83,7 @@ const MemberCard = ({projectId}) => {
 
   const handleSave = async () => {
     try {
-      const isValid = projectTeam.every(member =>
-        member.id && member.authLevel && member.role
-      );
+      const isValid = projectTeam.every((member) => member.id && member.authLevel && member.role);
 
       if (!isValid) {
         toast({
@@ -105,8 +103,8 @@ const MemberCard = ({projectId}) => {
     } catch (error) {
       toast({
         variant: 'destructive',
-        title: "저장 실패",
-        description: "알 수 없는 오류가 발생했습니다.",
+        title: '저장 실패',
+        description: '알 수 없는 오류가 발생했습니다.',
       });
     }
   };
@@ -125,23 +123,23 @@ const MemberCard = ({projectId}) => {
         role: '',
         authLevel: '',
       },
-    ])
-  }
+    ]);
+  };
 
   const handleFieldChange = (index: number, field: string, value: string) => {
     setProjectTeam((prevTeam) => {
       const updatedTeam = [...prevTeam];
-      updatedTeam[index] = {...updatedTeam[index], [field]: value};
+      updatedTeam[index] = { ...updatedTeam[index], [field]: value };
       return updatedTeam;
     });
-  }
+  };
 
   const [open, setOpen] = useState(false);
 
   //Todo: shadcn form으로 마이그레이션
   return (
     <Sheet open={sheetOpen} onOpenChange={handleSheetClose} modal={false}>
-      <SaveAlertDialog open={showAlert} onOpenChange={setShowAlert} onDiscard={handleDiscard}/>
+      <SaveAlertDialog open={showAlert} onOpenChange={setShowAlert} onDiscard={handleDiscard} />
       <SheetTrigger asChild className="w-full">
         <Card className="w-full transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
           <CardContent className="pt-4">
@@ -153,7 +151,7 @@ const MemberCard = ({projectId}) => {
                   className="flex items-center gap-4 py-3 first:pt-0 last:pb-0 hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white"/>
+                    <Users className="w-5 h-5 text-white" />
                   </div>
                   <div className="ml-3">
                     <p className="font-medium text-base text-gray-800 text-left">{user?.name}</p>
@@ -198,13 +196,13 @@ const MemberCard = ({projectId}) => {
                     aria-label="멤버 삭제"
                     onClick={() => handleDeleteButton(index, member)}
                   >
-                    <X className="h-4 w-4"/>
+                    <X className="h-4 w-4" />
                   </Button>
 
                   <div className="grid gap-3">
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <UserCircle className="h-4 w-4 text-white"/>
+                        <UserCircle className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label htmlFor={`user-${index}`} className="text-sm">
@@ -219,15 +217,15 @@ const MemberCard = ({projectId}) => {
                               className="w-full h-8 text-sm justify-between !border !border-input"
                               onClick={() => setOpen(!open)}
                             >
-                              {member.id ?
-                                usersAll.find((user) => user.value === member.id)?.label || '참여자를 선택하세요'
+                              {member.user_id
+                                ? usersAll.find((user) => user.value === member.user_id)?.label || '참여자를 선택하세요'
                                 : '참여자를 선택하세요'}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-full p-0">
                             <Command>
-                              <CommandInput placeholder="참여자 검색..." className="h-9"/>
+                              <CommandInput placeholder="참여자 검색..." className="h-9" />
                               <CommandList>
                                 <CommandEmpty>검색 결과가 없습니다</CommandEmpty>
                                 <CommandGroup>
@@ -240,9 +238,11 @@ const MemberCard = ({projectId}) => {
                                         setOpen(false);
                                       }}
                                       className={cn(
-                                        "flex items-center justify-between",
-                                        member.id === user.value ? "!bg-accent !text-accent-foreground" : "",
-                                        member.id !== user.value ? "data-[selected=true]:!bg-transparent data-[selected=true]:!text-foreground" : ""
+                                        'flex items-center justify-between',
+                                        member.id === user.value ? '!bg-accent !text-accent-foreground' : '',
+                                        member.id !== user.value
+                                          ? 'data-[selected=true]:!bg-transparent data-[selected=true]:!text-foreground'
+                                          : ''
                                       )}
                                     >
                                       {user.label}
@@ -264,7 +264,7 @@ const MemberCard = ({projectId}) => {
 
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <IdCard className="h-4 w-4 text-white"/>
+                        <IdCard className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label htmlFor={`role-${member.id}`} className="text-sm">
@@ -273,13 +273,12 @@ const MemberCard = ({projectId}) => {
                         <Select
                           value={getRoleLabel(member?.role)}
                           onValueChange={(displayValue) => {
-                            const keyValue = Object.keys(Role).find(
-                              (key) => Role[key] === displayValue
-                            );
-                            handleFieldChange(index, 'role', keyValue)}}
+                            const keyValue = Object.keys(Role).find((key) => Role[key] === displayValue);
+                            handleFieldChange(index, 'role', keyValue);
+                          }}
                         >
                           <SelectTrigger id={`role-${member.id}`} className="w-full h-8 text-sm !border !border-input">
-                            <SelectValue placeholder="역할을 선택하세요"/>
+                            <SelectValue placeholder="역할을 선택하세요" />
                           </SelectTrigger>
                           <SelectContent>
                             {Object.values(Role).map((role) => (
@@ -294,7 +293,7 @@ const MemberCard = ({projectId}) => {
 
                     <div className="flex items-center space-x-3">
                       <div className="bg-secondary p-1.5 rounded-full">
-                        <Shield className="h-4 w-4 text-white"/>
+                        <Shield className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1 space-y-0.5">
                         <Label htmlFor={`role-${member.id}`} className="text-sm">
@@ -303,14 +302,12 @@ const MemberCard = ({projectId}) => {
                         <Select
                           value={getAuthLevelLabel(member?.authLevel)}
                           onValueChange={(displayValue) => {
-                            const keyValue = Object.keys(AuthLevel).find(
-                              (key) => AuthLevel[key] === displayValue
-                            );
+                            const keyValue = Object.keys(AuthLevel).find((key) => AuthLevel[key] === displayValue);
                             handleFieldChange(index, 'authLevel', keyValue);
                           }}
                         >
                           <SelectTrigger id={`name-${member.id}`} className="w-full h-8 text-sm">
-                            <SelectValue placeholder="권한을 선택하세요"/>
+                            <SelectValue placeholder="권한을 선택하세요" />
                           </SelectTrigger>
                           <SelectContent>
                             {Object.values(AuthLevel).map((authLevel) => (
@@ -328,12 +325,7 @@ const MemberCard = ({projectId}) => {
             ))}
           </div>
           <div className="mt-4">
-            <Button
-              className="w-full h-8 text-sm"
-              variant="secondary"
-              size="sm"
-              onClick={handleAddMember}
-            >
+            <Button className="w-full h-8 text-sm" variant="secondary" size="sm" onClick={handleAddMember}>
               팀원 추가
             </Button>
           </div>
