@@ -1,12 +1,11 @@
-@import url("https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT.css");
+@import url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT.css');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: SUIT, sans-serif, SUIT, Inter, system-ui, Avenir, Helvetica,
-    Arial;
+  font-family: SUIT, sans-serif, SUIT, Inter, system-ui, Avenir, Helvetica, Arial;
   line-height: 1.5;
   font-weight: 400;
 
@@ -21,162 +20,162 @@
 }
 
 a {
-    font-weight: 500;
-    color: var(--foreground); /* 기본 텍스트 컬러 */
-    text-decoration: inherit;
+  font-weight: 500;
+  color: var(--foreground); /* 기본 텍스트 컬러 */
+  text-decoration: inherit;
 }
 a:hover {
-    color: var(--accent); /* 자연스럽게 강조 */
+  color: var(--accent); /* 자연스럽게 강조 */
 }
 
 body {
-    margin: 0;
-    display: block;
-    min-width: 320px;
-    min-height: 100vh;
-    padding: 0px;
-    background-color: var(--background); /* 연한 그레이 */
-    color: var(--foreground); /* 어두운 텍스트 */
+  margin: 0;
+  display: block;
+  min-width: 320px;
+  min-height: 100vh;
+  padding: 0px;
+  background-color: var(--background); /* 연한 그레이 */
+  color: var(--foreground); /* 어두운 텍스트 */
 }
 
 h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
-    color: var(--foreground);
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--foreground);
 }
 
 button {
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 600;
-    font-family: inherit;
-    background-color: var(--card);
-    color: var(--foreground);
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+  border-radius: var(--radius);
+  border: var(--border);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
 button:hover {
-    /* 매우 미묘한 배경색 변화 (98% card + 2% muted) */
-    background-color: color-mix(in srgb, var(--card) 98%, var(--muted));
-    /* 살짝 진해지는 테두리 (95% border + 5% accent) */
-    border-color: color-mix(in srgb, var(--border) 95%, var(--accent));
-    color: var(--foreground);
+  /* 매우 미묘한 배경색 변화 (98% card + 2% muted) */
+  background-color: color-mix(in srgb, var(--card) 98%, var(--muted));
+  /* 살짝 진해지는 테두리 (95% border + 5% accent) */
+  border-color: color-mix(in srgb, var(--border) 95%, var(--accent));
+  color: var(--foreground);
 }
 
 button:focus,
 button:focus-visible {
-    /* 아웃라인도 매우 연하게 */
-    outline: 2px solid color-mix(in srgb, var(--ring) 20%, transparent);
+  /* 아웃라인도 매우 연하게 */
+  outline: 2px solid color-mix(in srgb, var(--ring) 20%, transparent);
 }
 
 @media (prefers-color-scheme: light) {
-    :root {
-        color: var(--foreground);
-        background-color: var(--background);
-    }
-    a:hover {
-        color: var(--accent);
-    }
-    button {
-        background-color: var(--card);
-    }
-    button:hover {
-        background-color: var(--muted);
-        border-color: var(--accent);
-    }
+  :root {
+    color: var(--foreground);
+    background-color: var(--background);
+  }
+  a:hover {
+    color: var(--accent);
+  }
+  button {
+    background-color: var(--card);
+  }
+  button:hover {
+    background-color: var(--muted);
+    border-color: var(--accent);
+  }
 }
 
 @layer base {
-    :root {
-        /* 기본 배경과 텍스트 */
-        --background: 0 0% 100%;
-        --foreground: 217 33% 17%;      /* #1e293b */
+  :root {
+    /* 기본 배경과 텍스트 */
+    --background: 0 0% 100%;
+    --foreground: 217 33% 17%; /* #1e293b */
 
-        /* 카드 스타일 */
-        --card: 0 0% 100%;
-        --card-foreground: 217 33% 17%;  /* #1e293b */
+    /* 카드 스타일 */
+    --card: 0 0% 100%;
+    --card-foreground: 217 33% 17%; /* #1e293b */
 
-        /* 팝오버 스타일 */
-        --popover: 0 0% 100%;
-        --popover-foreground: 217 33% 17%;  /* #1e293b */
+    /* 팝오버 스타일 */
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 17%; /* #1e293b */
 
-        /* primary: 네이비 */
-        --primary: 217 33% 17%;         /* #1e293b */
-        --primary-foreground: 0 0% 100%;
+    /* primary: 네이비 */
+    --primary: 217 33% 17%; /* #1e293b */
+    --primary-foreground: 0 0% 100%;
 
-        /* secondary: 밝은 네이비 */
-        --secondary: 217 33% 25%;
-        --secondary-foreground: 0 0% 100%;
+    /* secondary: 밝은 네이비 */
+    --secondary: 217 33% 25%;
+    --secondary-foreground: 0 0% 100%;
 
-        /* muted: 매우 연한 네이비 */
-        --muted: 217 33% 90%;
-        --muted-foreground: 217 33% 35%;
+    /* muted: 매우 연한 네이비 */
+    --muted: 217 33% 90%;
+    --muted-foreground: 217 33% 35%;
 
-        /* accent: 스카이블루 */
-        --accent: 217 33% 90%;
-        --accent-foreground: 217 33% 35%;
+    /* accent: 스카이블루 - 좀 더 뚜렷한 스카이블루로 수정 */
+    --accent: 217 33% 90%;
+    --accent-foreground: 217 33% 35%;
 
-        /* 경고색 */
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 100%;
+    /* 경고색 */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-        /* 테두리와 입력창: 연한 네이비 */
-        --border: 217 33% 90%;
-        --input: 217 33% 90%;
-        --ring: 217 33% 25%;
+    /* 테두리와 입력창: 연한 네이비 */
+    --border: 217 33% 90%;
+    --input: 217 33% 90%;
+    --ring: 217 33% 25%;
 
-        /* 차트 색상: 네이비 + 스카이블루 조합 */
-        --chart-1: 217 33% 17%;         /* #1e293b 메인 네이비 */
-        --chart-2: 199 89% 48%;         /* #0ea5e9 스카이블루 */
-        --chart-3: 217 33% 25%;         /* 밝은 네이비 */
-        --chart-4: 217 33% 35%;         /* 더 밝은 네이비 */
-        --chart-5: 199 60% 45%;         /* 차분한 스카이블루 */
+    /* 차트 색상: 네이비 + 스카이블루 조합 */
+    --chart-1: 217 33% 17%; /* #1e293b 메인 네이비 */
+    --chart-2: 199 89% 48%; /* #0ea5e9 스카이블루 */
+    --chart-3: 217 33% 25%; /* 밝은 네이비 */
+    --chart-4: 217 33% 35%; /* 더 밝은 네이비 */
+    --chart-5: 199 60% 45%; /* 차분한 스카이블루 */
 
-        --radius: 0.75rem;
-    }
+    --radius: 0.75rem;
+  }
 
-    .dark {
-        /* 다크모드: 진한 네이비 배경 */
-        --background: 217 33% 17%;      /* #1e293b */
-        --foreground: 0 0% 100%;
+  .dark {
+    /* 다크모드: 진한 네이비 배경 */
+    --background: 217 33% 17%; /* #1e293b */
+    --foreground: 0 0% 100%;
 
-        --card: 217 33% 17%;
-        --card-foreground: 0 0% 100%;
+    --card: 217 33% 17%;
+    --card-foreground: 0 0% 100%;
 
-        --popover: 217 33% 17%;
-        --popover-foreground: 0 0% 100%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 0 0% 100%;
 
-        /* 다크모드에서는 밝은색을 primary로 */
-        --primary: 0 0% 100%;
-        --primary-foreground: 217 33% 17%;
+    /* 다크모드에서는 밝은색을 primary로 */
+    --primary: 0 0% 100%;
+    --primary-foreground: 217 33% 17%;
 
-        --secondary: 217 33% 25%;
-        --secondary-foreground: 0 0% 100%;
+    --secondary: 217 33% 25%;
+    --secondary-foreground: 0 0% 100%;
 
-        --muted: 217 33% 25%;
-        --muted-foreground: 215 20% 65%;
+    --muted: 217 33% 25%;
+    --muted-foreground: 215 20% 65%;
 
-        /* 다크모드에서도 스카이블루 액센트 유지 */
-        --accent: 199 89% 48%;          /* #0ea5e9 */
-        --accent-foreground: 0 0% 100%;
+    /* 다크모드에서도 스카이블루 액센트 유지 */
+    --accent: 217 33% 90%;
+    --accent-foreground: 217 33% 35%;
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
 
-        --border: 217 33% 25%;
-        --input: 217 33% 25%;
-        --ring: 217 33% 25%;          /* #0ea5e9 */
+    --border: 217 33% 90%;
+    --input: 217 33% 90%;
+    --ring: 217 33% 25%;
 
-        /* 다크모드 차트 색상 */
-        --chart-1: 199 89% 48%;         /* #0ea5e9 스카이블루 */
-        --chart-2: 217 33% 45%;         /* 밝은 네이비 */
-        --chart-3: 217 33% 35%;         /* 미디엄 네이비 */
-        --chart-4: 217 33% 25%;         /* 진한 네이비 */
-        --chart-5: 217 33% 17%;         /* #1e293b 메인 네이비 */
-    }
+    /* 다크모드 차트 색상 */
+    --chart-1: 199 89% 48%; /* #0ea5e9 스카이블루 */
+    --chart-2: 217 33% 45%; /* 밝은 네이비 */
+    --chart-3: 217 33% 35%; /* 미디엄 네이비 */
+    --chart-4: 217 33% 25%; /* 진한 네이비 */
+    --chart-5: 217 33% 17%; /* #1e293b 메인 네이비 */
+  }
 }
 
 @layer base {

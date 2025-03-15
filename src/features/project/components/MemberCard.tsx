@@ -119,7 +119,7 @@ const MemberCard = ({ projectId }) => {
     setProjectTeam((prevTeam) => [
       ...prevTeam,
       {
-        id: '',
+        user_id: '',
         role: '',
         authLevel: '',
       },
@@ -127,6 +127,7 @@ const MemberCard = ({ projectId }) => {
   };
 
   const handleFieldChange = (index: number, field: string, value: string) => {
+    console.log(value);
     setProjectTeam((prevTeam) => {
       const updatedTeam = [...prevTeam];
       updatedTeam[index] = { ...updatedTeam[index], [field]: value };
@@ -146,16 +147,13 @@ const MemberCard = ({ projectId }) => {
             <h3 className="text-lg font-semibold mb-3">팀 구성원</h3>
             <div className="divide-y divide-gray-300">
               {users?.map((user, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 py-3 first:pt-0 last:pb-0 hover:bg-gray-50 transition-colors"
-                >
+                <div key={index} className="flex items-center gap-4 py-3 first:pt-0 last:pb-0 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
                     <Users className="w-5 h-5 text-white" />
                   </div>
                   <div className="ml-3">
-                    <p className="font-medium text-base text-gray-800 text-left">{user?.name}</p>
-                    <p className="text-xs text-gray-500 text-left">{getRoleLabel(user?.role)}</p>
+                    <p className="font-medium text-foreground text-left">{user?.name}</p>
+                    <p className="text-xs text-foreground text-left">{getRoleLabel(user?.role)}</p>
                   </div>
                 </div>
               ))}
@@ -188,7 +186,7 @@ const MemberCard = ({ projectId }) => {
         <div>
           <div className="space-y-4">
             {projectTeam?.map((member, index) => (
-              <div key={member.id} className="relative">
+              <div key={member.user_id} className="relative">
                 <Card className="p-3 border border-gray-200">
                   <Button
                     variant="ghost"
@@ -234,13 +232,13 @@ const MemberCard = ({ projectId }) => {
                                       key={user.value}
                                       value={user.value}
                                       onSelect={() => {
-                                        handleFieldChange(index, 'id', user.value);
+                                        handleFieldChange(index, 'user_id', user.value);
                                         setOpen(false);
                                       }}
                                       className={cn(
                                         'flex items-center justify-between',
-                                        member.id === user.value ? '!bg-accent !text-accent-foreground' : '',
-                                        member.id !== user.value
+                                        member.user_id === user.value ? '!bg-accent !text-accent-foreground' : '',
+                                        member.user_id !== user.value
                                           ? 'data-[selected=true]:!bg-transparent data-[selected=true]:!text-foreground'
                                           : ''
                                       )}
@@ -249,7 +247,7 @@ const MemberCard = ({ projectId }) => {
                                       <Check
                                         className={cn(
                                           'h-4 w-4',
-                                          member.id === user.value ? 'opacity-100' : 'opacity-0'
+                                          member.user_id === user.value ? 'opacity-100' : 'opacity-0'
                                         )}
                                       />
                                     </CommandItem>

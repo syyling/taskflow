@@ -39,7 +39,7 @@ const UserMenu = () => {
     <div className="relative">
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center space-x-2 rounded-full p-2 transition-colors hover:bg-muted/50">
-          <User className="h-5 w-5" />
+          <User className="h-5 w-5 text-foreground" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {user ? (

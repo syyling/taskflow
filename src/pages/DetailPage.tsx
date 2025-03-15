@@ -10,9 +10,9 @@ import { fetchProject } from '@/features/project/fetchers/project.tsx';
 import { useEffect, useState } from 'react';
 import { Project } from '@/features/project/types/project.model.tsx';
 import { mapProjectDTOToProject } from '@/features/project/project.mapper.ts';
-import TechStackCard from "@/features/project/components/TechStackCard.tsx";
-import DetailPageSkeleton from "@/pages/DetailPageSkeleton.tsx";
-import ErrorPage from "@/pages/ErrorPage.tsx";
+import TechStackCard from '@/features/project/components/TechStackCard.tsx';
+import DetailPageSkeleton from '@/pages/DetailPageSkeleton.tsx';
+import ErrorPage from '@/pages/ErrorPage.tsx';
 
 export default function DetailPage() {
   const [project, setProject] = useState<Project>();
@@ -63,14 +63,14 @@ export default function DetailPage() {
             <div className="flex flex-col md:flex-row justify-between items-start gap-4 md:items-center">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-bold">{project?.name}</h1>
+                  <h1 className="text-foreground text-3xl font-bold">{project?.name}</h1>
                   <Badge variant="secondary" className="capitalize">
                     {project?.progress}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <Calendar className="w-4 h-4" />
-                  <span className="text-sm">
+                  <Calendar className="w-4 h-4 text-foreground" />
+                  <span className="text-sm text-foreground">
                     {project?.startDate?.toISOString().split('T')[0]} - {project?.endDate?.toISOString().split('T')[0]}
                   </span>
                 </div>
@@ -125,7 +125,7 @@ export default function DetailPage() {
 
               {/* Right Column */}
               <div className="space-y-6">
-                <MemberCard projectId={project?.id}/>
+                <MemberCard projectId={project?.id} />
                 <TechStackCard projectId={project?.id} />
               </div>
             </div>

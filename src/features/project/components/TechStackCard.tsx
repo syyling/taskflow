@@ -11,12 +11,11 @@ import {
 import { Badge } from '@/components/ui/badge.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Input } from '@/components/ui/input.tsx';
-import {useQuery} from "@tanstack/react-query";
-import {fetchProjects, getTechStacks} from "@/features/project/fetchers/project.tsx";
-import {useEffect, useState} from "react";
+import { useQuery } from '@tanstack/react-query';
+import { fetchProjects, getTechStacks } from '@/features/project/fetchers/project.tsx';
+import { useEffect, useState } from 'react';
 
 const TechStackCard = ({ projectId }) => {
-
   const [techStack, setTechStack] = useState([]);
 
   const {
@@ -30,19 +29,19 @@ const TechStackCard = ({ projectId }) => {
     enabled: !!projectId,
   });
 
-  const groupedTechStack = fetchData ?
-    fetchData.reduce((acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = [];
-      }
-      acc[item.category].push(item);
-      return acc;
-    }, {}) : {};
+  const groupedTechStack = fetchData
+    ? fetchData.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = [];
+        }
+        acc[item.category].push(item);
+        return acc;
+      }, {})
+    : {};
 
   useEffect(() => {
     setTechStack(groupedTechStack);
   }, [fetchData]);
-
 
   return (
     <Sheet>
@@ -53,7 +52,7 @@ const TechStackCard = ({ projectId }) => {
             <div className="space-y-4">
               {Object.entries(techStack).map(([category, techs]) => (
                 <div key={category} className="flex items-center gap-4">
-                  <h4 className="font-medium text-gray-600 mb-1 text-left min-w-[100px]">{category}</h4>
+                  <h4 className="font-medium text-foreground mb-1 text-left min-w-[100px]">{category}</h4>
                   <div className="flex flex-wrap gap-2 flex-grow">
                     {Array.isArray(techs) &&
                       techs.map((tech) => (
@@ -67,14 +66,13 @@ const TechStackCard = ({ projectId }) => {
             </div>
           </CardContent>
         </Card>
-
       </SheetTrigger>
       <SheetContent className="sm:max-w-[425px] [&>button]:hidden">
         <SheetHeader>
           <div className="flex items-center justify-between mb-4">
             <SheetTitle className="text-lg">기술 스택</SheetTitle>
             <Button variant="default" size="sm">
-              <Plus className="h-4 w-4 mr-1"/> 카테고리 추가
+              <Plus className="h-4 w-4 mr-1" /> 카테고리 추가
             </Button>
           </div>
         </SheetHeader>
@@ -85,11 +83,7 @@ const TechStackCard = ({ projectId }) => {
               {/* 카테고리 헤더 */}
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-base font-semibold text-foreground">{category.toUpperCase()}</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0"
-                >
+                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                   <X className="h-4 w-4" />
                 </Button>
               </div>
@@ -100,17 +94,9 @@ const TechStackCard = ({ projectId }) => {
                   {/* 각 기술 항목 */}
                   {techs.map((tech, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <Input
-                        value={tech}
-                        className="flex-1"
-                        placeholder={"기술을 입력해주세요"}
-                      />
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                      >
-                        <X className="h-4 w-4"/>
+                      <Input value={tech} className="flex-1" placeholder={'기술을 입력해주세요'} />
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <X className="h-4 w-4" />
                       </Button>
                     </div>
                   ))}
@@ -122,7 +108,7 @@ const TechStackCard = ({ projectId }) => {
                       size="sm"
                       className="px-3 py-1 bg-muted w-full rounded-md text-sm font-medium"
                     >
-                      <Plus className="h-4 w-4 mr-2"/> 기술 추가
+                      <Plus className="h-4 w-4 mr-2" /> 기술 추가
                     </Button>
                   </div>
                 </div>
