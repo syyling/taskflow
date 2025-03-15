@@ -1,5 +1,11 @@
-import {supabase} from '@/supabase.ts';
-import {FeatureDTO, ProjectDTO} from '@/features/project/types/project.dto.ts';
+import { supabase } from '@/supabase.ts';
+import { FeatureDTO, ProjectDTO } from '@/features/project/types/project.dto.ts';
+import { PostgrestError } from '@supabase/supabase-js';
+
+type PostgrestResponse<T> = {
+  data: T | null;
+  error: PostgrestError | null;
+};
 
 export const fetchProjects = async (onlyVisible, userId): Promise<ProjectDTO[] | null> => {
   const { data: projectIds, error: idError } = await supabase
@@ -9,7 +15,7 @@ export const fetchProjects = async (onlyVisible, userId): Promise<ProjectDTO[] |
 
   if (idError) throw idError;
 
-  const projectIdList = projectIds.map(p => p.project_id);
+  const projectIdList = projectIds.map((p) => p.project_id);
 
   if (projectIdList.length === 0) return [];
 
@@ -83,62 +89,53 @@ export const getProjectMembers = async (projectId) => {
 
   const { data, error } = await supabase
     .from('project_in_user')
-    .select(`
+    .select(
+      `
             authLevel,
             role,
             user_id,
             project_id,
             user (name)
-          `)
-    .eq("project_id", projectId)
+          `
+    )
+    .eq('project_id', projectId)
     .returns<ProjectMember[]>(); // 반환 타입을 명시적으로 설정
 
   if (error) throw error;
 
-  return data.map(member => ({
+  return data.map((member) => ({
     ...member,
-    name: member.user?.name
+    name: member.user?.name,
   }));
-}
+};
 
 export const upsertProjectInUsers = async (projectTeam, deleteMembers, projectId) => {
-  const records = projectTeam.map(team => ({
+  const records = projectTeam.map((team) => ({
     project_id: projectId,
     authLevel: team.authLevel || '',
     role: team.role || '',
-    user_id: team.id || ''
+    user_id: team.id || '',
   }));
 
   const [deleteResult, upsertResult] = await Promise.all([
     deleteMembers.length > 0
-      ? supabase
-        .from('project_in_user')
-        .delete()
-        .eq('project_id', projectId)
-        .in('user_id', deleteMembers)
+      ? supabase.from('project_in_user').delete().eq('project_id', projectId).in('user_id', deleteMembers)
       : Promise.resolve({ error: null }),
 
     records.length > 0
-      ? supabase
-        .from('project_in_user')
-        .upsert(records)
-        .select()
-      : Promise.resolve({ data: [], error: null })
+      ? supabase.from('project_in_user').upsert(records).select()
+      : Promise.resolve({ data: [], error: null }),
   ]);
 
   if (deleteResult.error) throw deleteResult.error;
   if (upsertResult.error) throw upsertResult.error;
 
   return upsertResult.data;
-}
+};
 
-export const getTechStacks = async (projectId : number)=>  {
-  const { data: techStack, error } = await supabase
-    .from('techStack')
-    .select('*')
-    .eq('projectId', projectId);
+export const getTechStacks = async (projectId: number) => {
+  const { data: techStack, error } = await supabase.from('techStack').select('*').eq('projectId', projectId);
 
   if (error) throw error;
   return techStack;
-
-}
+};

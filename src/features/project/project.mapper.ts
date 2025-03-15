@@ -1,6 +1,5 @@
-import { ProjectDTO, UserDTO } from '@/fecthers/project/project.dto.ts';
-import { Project, User } from '@/types/project.model.tsx';
-import { AuthLevel } from '@/types/enums.tsx';
+import { ProjectDTO, UserDTO } from '@/features/project/types/project.dto.ts';
+import { Project, User } from '@/features/project/types/project.model.tsx';
 
 export const mapUserDTOToUser = (userDTO: UserDTO, role: string, authLevel: string): User => {
   return {
@@ -22,7 +21,7 @@ export const mapProjectDTOToProject = (projectDTO: ProjectDTO): Project => {
     progress: projectDTO.progress,
     isVisible: projectDTO.isVisible,
     users: projectDTO.users.map(
-      userWrapper => mapUserDTOToUser(userWrapper.user, userWrapper.role, userWrapper.authLevel) // role 전달
+      (userWrapper) => mapUserDTOToUser(userWrapper.user, userWrapper.role, userWrapper.authLevel) // role 전달
     ),
   };
 };
