@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { Label } from '@/components/ui/label.tsx';
-import {Calendar as CalendarIcon, Check, ChevronsUpDown, Plus, PlusCircle} from 'lucide-react';
+import { Calendar as CalendarIcon, Check, ChevronsUpDown, Plus, PlusCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils.ts';
 import { Calendar } from '@/components/ui/calendar.tsx';
@@ -156,20 +156,21 @@ export function ProjectDialog() {
   return (
     <Dialog modal={false}>
       <DialogTrigger asChild>
-        <Button
-          className="flex items-center gap-2 bg-primary/80 hover:bg-primary dark:bg-primary/90 dark:hover:bg-primary backdrop-blur-sm shadow-sm text-white h-10 px-3 rounded-full transition-colors">
-          <Plus className="w-4 h-4"/>
-          <span className="text-sm font-medium">새 프로젝트</span>
+        <Button className="flex items-center gap-2 bg-primary backdrop-blur-sm shadow-md text-primary-foreground h-10 px-4 rounded-full transition-all">
+          <Plus className="w-4 h-4 text-muted" />
+          <span className="text-sm font-normal text-muted">새 프로젝트</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]" style={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)" }}>
+      <DialogContent className="sm:max-w-[500px]" style={{ boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)' }}>
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">프로젝트 추가</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-foreground">프로젝트 추가</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           <div className="flex flex-col space-y-2">
-            <Label htmlFor="name">제목</Label>
+            <Label htmlFor="name" className="text-foreground">
+              제목
+            </Label>
             <Input
               id="name"
               placeholder="프로젝트 제목을 입력하세요"
@@ -180,7 +181,9 @@ export function ProjectDialog() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <Label htmlFor="description">설명</Label>
+            <Label htmlFor="description" className="text-foreground">
+              설명
+            </Label>
             <Input
               id="description"
               placeholder="프로젝트 설명을 입력하세요"
@@ -191,13 +194,15 @@ export function ProjectDialog() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <Label htmlFor="deadline">마감일</Label>
+            <Label htmlFor="deadline" className="text-foreground">
+              마감일
+            </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    'w-full justify-start text-left font-normal',
+                    'w-full justify-start text-left font-normal border border-input',
                     !projectData.deadline && 'text-muted-foreground'
                   )}
                 >
@@ -212,10 +217,17 @@ export function ProjectDialog() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <Label htmlFor="user">참여자</Label>
+            <Label htmlFor="user" className="text-foreground">
+              참여자
+            </Label>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between text-foreground"
+                >
                   {projectData.selectedUsers.length > 0
                     ? projectData.selectedUsers
                         .map((value) => users.find((user) => user.value === value)?.label)
@@ -257,9 +269,11 @@ export function ProjectDialog() {
           </div>
 
           <div className="flex flex-col space-y-2">
-            <Label htmlFor="progress">진행 상황</Label>
+            <Label htmlFor="progress" className="text-foreground">
+              진행 상황
+            </Label>
             <Select onValueChange={(value) => handleInputChange('progress', value)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full text-foreground">
                 <SelectValue placeholder="진행 상황을 선택하세요" />
               </SelectTrigger>
               <SelectContent>
