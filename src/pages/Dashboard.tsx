@@ -8,9 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext.tsx';
 import { Project } from '@/features/project/types/project.model.tsx';
 import { mapProjectDTOsToProjects } from '@/features/project/project.mapper.ts';
-import {ProjectDialog} from "@/features/project/components/ProjectDialog.tsx";
-import DetailPageSkeleton from "@/pages/DetailPageSkeleton.tsx";
-import ErrorPage from "@/pages/ErrorPage.tsx";
+import { ProjectDialog } from '@/features/project/components/ProjectDialog.tsx';
+import DashboardSkeleton from '@/pages/DashboardSkeleton.tsx';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState<Project[] | undefined>([]);
@@ -34,16 +33,11 @@ export default function Dashboard() {
   }, [projectsData]);
 
   if (isLoading) {
-    return <DetailPageSkeleton />;
+    return <DashboardSkeleton />;
   }
-
-  if (error) {
-    return <ErrorPage />;
-  }
-
 
   return (
-    <div className="w-full min-h-screen bg-background ">
+    <div className="w-full min-h-screen bg-background px-8">
       {/* Glass-morphism Header */}
       <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg shadow-lg p-4 mb-8 rounded-xl">
         <div className="flex flex-col space-y-6 md:flex-row md:items-center md:justify-between md:space-y-0">
@@ -82,7 +76,7 @@ export default function Dashboard() {
       </div>
 
       {/* Projects Grid with Masonry-like Layout */}
-      <div className="grid gap-6 px-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-max">
         {projects?.map((project, index) => (
           <div key={index} className="transform transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
             <ProjectCard project={project} />
